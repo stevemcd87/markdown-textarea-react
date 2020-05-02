@@ -10,7 +10,7 @@ function App() {
   return (
     <div className="App">
       <textarea onChange={logE} />
-    {htmlElements.map(v=>v)}
+      {htmlElements.map(v => v)}
     </div>
   );
   function logE(e) {
@@ -25,14 +25,20 @@ function App() {
 
   function designateElement(v) {
     let clone = v.slice(),
-      heading = clone.match(/^#{1,6}\s/);
-    if (heading && heading.length !== 0) {
-      let htmlTag = `h${heading[0].length - 1 }`,
-        val = clone.replace(heading[0], "");
-      return <DesignateElement {...{ htmlTag, val }} />;
-    }
+      headingTag = clone.match(/^#{1,6}\s/),
+      blockquoteTag = clone.match(/^>\s/),
+      htmlTag = "p",
+      val = clone;
 
-    return <p>{clone}</p>;
+    if (headingTag && headingTag.length > 0) {
+      htmlTag = `h${headingTag[0].length - 1}`;
+        val = clone.replace(headingTag[0], "");
+    } else if (blockquoteTag  && blockquoteTag.length > 0) {
+       htmlTag = "blockquote";
+        val = clone.replace(blockquoteTag[0], "");
+    }
+    return <DesignateElement {...{ htmlTag, val }} />;
+
   }
 }
 
@@ -42,12 +48,15 @@ function DesignateElement(props) {
 }
 
 const HTMLTAGS = {
+  p: s => <p className="mtr-p">{s}</p>,
   h1: s => <h1 className="mtr-h1">{s}</h1>,
   h2: s => <h2 className="mtr-h2">{s}</h2>,
   h3: s => <h3 className="mtr-h3">{s}</h3>,
   h4: s => <h4 className="mtr-h4">{s}</h4>,
   h5: s => <h5 className="mtr-h5">{s}</h5>,
   h6: s => <h6 className="mtr-h6">{s}</h6>,
+  blockquote: s => <blockquote className="mtr-blockquote">{s}</blockquote>,
+
 };
 
 export default App;
