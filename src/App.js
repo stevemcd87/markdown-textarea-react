@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./App.css";
 
 function App() {
   let [htmlElements, setHtmlElements] = useState([]);
-  useEffect(() => {});
   return (
     <div className="App">
       <textarea className="mtr-textarea" onChange={updatePreview} />
@@ -12,9 +11,9 @@ function App() {
   );
 
   function updatePreview(e) {
-    let val = e.target.value,
+    let textValue = e.target.value,
       // Split textarea's value by linebreaks
-      lineBreaks = val.split(/\n/g),
+      lineBreaks = textValue.split(/\n/g),
       // Wrap each line break with a designated element
       markdownRows = lineBreaks.map(designateElement);
     setHtmlElements(markdownRows);
@@ -35,7 +34,7 @@ function App() {
     if (matchedPattern) {
       htmlTag = matchedPattern.htmlTag(line);
       elementText = line.replace(
-        line.match(new RegExp(...matchedPattern.regExPattern)),
+        line.match(new RegExp(...matchedPattern.regExPattern))[0],
         ""
       );
     }
@@ -66,15 +65,17 @@ function Preview(props) {
 }
 
 const REGEXPATTERNS = {
-  // Reg Ex pattern for Heading =  /^#{1,6}\s/
   heading: {
     regExPattern: ["^#{1,6}\\s"],
     htmlTag: s => `h${s.match(/^#{1,6}\s/)[0].length - 1}`
   },
-  // Reg Ex pattern for Blockquote =  /^>\s/
   blockquote: {
     regExPattern: ["^>\\s"],
     htmlTag: s => "blockquote"
+  },
+  list: {
+    regExPattern: ["^(-|\\*)\\s"],
+    htmlTag: s => "li"
   }
 };
 
@@ -86,6 +87,7 @@ const HTMLTAGS = {
   h4: s => <h4 className="mtr-h4">{s}</h4>,
   h5: s => <h5 className="mtr-h5">{s}</h5>,
   h6: s => <h6 className="mtr-h6">{s}</h6>,
+  li: s => <li className="mtr-li">{s}</li>,
   blockquote: s => <blockquote className="mtr-blockquote">{s}</blockquote>
 };
 
