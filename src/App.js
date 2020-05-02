@@ -74,7 +74,7 @@ const REGEXPATTERNS = {
     htmlTag: s => "blockquote"
   },
   list: {
-    regExPattern: ["^(-|\\*)\\s"],
+    regExPattern: ["^(-|\\*|\\+)\\s"],
     htmlTag: s => "li"
   }
 };

@@ -31,11 +31,12 @@ it("should display li tags", () => {
   const { container } = render(<App />);
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: {
-      value: "- hey1\n* hey2"
+      value: "- hey1\n* hey2\n+ hey3"
     }
   });
   const containersList = [...container.querySelectorAll("li")];
-  expect(containersList.length).toBe(2);
+  expect(containersList.length).toBe(3);
   expect(containersList[0].innerHTML).toBe("hey1");
   expect(containersList[1].innerHTML).toBe("hey2");
+  expect(containersList[2].innerHTML).toBe("hey3");
 });
