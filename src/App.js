@@ -11,30 +11,48 @@ function App() {
   );
 
   function updatePreview(e) {
+    // TODO:
     let textValue = e.target.value,
+      // An array of all code markdown found
+      codeBlocks = findCodeBlocks(textValue),
       // Split textarea's value by linebreaks
-      lineBreaks = textValue.split(/\n/g),
-      // Wrap each line break with a designated element
-      markdownRows = lineBreaks.map(designateElement);
+      lineBreaks = removeCodeBlocks(textValue).split(/\n/g);
+    if (codeBlocks) lineBreaks = returnCodeBlocks(codeBlocks, lineBreaks);
+    // Wrap each line break with a designated element
+    const markdownRows = lineBreaks.map(designateElement);
+
     setHtmlElements(markdownRows);
   }
 
-  function designateElement(line) {
+  function findCodeBlocks(textValue) {
+    let codePattern = new RegExp(...REGEXPATTERNS.code.regExPattern);
+    return textValue.match(codePattern);
+  }
+  function removeCodeBlocks(textValue) {
+    let codePattern = new RegExp(...REGEXPATTERNS.code.regExPattern);
+    // Removes code blocks and replaces with <MTR-code-MTR> for placement
+    return textValue.replace(codePattern, "\n<MTR-code-MTR>\n");
+  }
+  function returnCodeBlocks(codeBlocks, lineBreaks) {
+    let lb = lineBreaks.slice();
+    codeBlocks.forEach(cb => {
+      lb[lb.findIndex(v => v === "<MTR-code-MTR>")] = cb;
+    });
+    return lb;
+  }
+
+  function designateElement(text) {
     // HTML Element will have a default of the p tag
     let htmlTag = "p",
       // The text to be put into the htmlTag
-      elementText = line.slice(),
-      // checking for a reference for a heading tags(h1,h2,etc...)
-      headingTag = elementText.match(/^#{1,6}\s/),
-      // checking for a reference for a blockquote tag
-      blockquoteTag = elementText.match(/^>\s/),
-      // Searches line for a markdown pattern
-      matchedPattern = searchForMatch(line);
+      elementText = text.slice(),
+      // Searches text for a markdown pattern
+      matchedPattern = searchForMatch(text);
     // updates htmlTag & elementText if matchedPattern was found
     if (matchedPattern) {
-      htmlTag = matchedPattern.htmlTag(line);
-      elementText = line.replace(
-        line.match(new RegExp(...matchedPattern.regExPattern))[0],
+      htmlTag = matchedPattern.htmlTag(text);
+      if (htmlTag!== "code")elementText = text.replace(
+        text.match(new RegExp(...matchedPattern.regExPattern))[0],
         ""
       );
     }
@@ -76,11 +94,15 @@ const REGEXPATTERNS = {
   list: {
     regExPattern: ["^(-|\\*|\\+)\\s"],
     htmlTag: s => "li"
+  },
+  code: {
+    regExPattern: ["```\\s*.*\\s*```\\n", "g"],
+    htmlTag: s => "code"
   }
 };
 
 const HTMLTAGS = {
-  p: s => <p className="mtr-p">{s}</p>,
+  p: s => (s ? <p className="mtr-p">{s}</p> : false),
   h1: s => <h1 className="mtr-h1">{s}</h1>,
   h2: s => <h2 className="mtr-h2">{s}</h2>,
   h3: s => <h3 className="mtr-h3">{s}</h3>,
@@ -88,7 +110,18 @@ const HTMLTAGS = {
   h5: s => <h5 className="mtr-h5">{s}</h5>,
   h6: s => <h6 className="mtr-h6">{s}</h6>,
   li: s => <li className="mtr-li">{s}</li>,
+  code: code => <CodeTag {...{ code }} />,
   blockquote: s => <blockquote className="mtr-blockquote">{s}</blockquote>
 };
+
+function CodeTag(props) {
+  let { code } = props,
+    displayedCode = code.replace(/```/g,"");
+  return (
+    <div className="mtr-code-component">
+      <code className="mtr-code">{displayedCode}</code>
+    </div>
+  );
+}
 
 export default App;

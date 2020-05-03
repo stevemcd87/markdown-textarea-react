@@ -1,5 +1,5 @@
 import React from "react";
-import { render, fireEvent, screen } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import App from "./App";
 
 it("should display h1 - h6 tags", () => {
@@ -39,4 +39,13 @@ it("should display li tags", () => {
   expect(containersList[0].innerHTML).toBe("hey1");
   expect(containersList[1].innerHTML).toBe("hey2");
   expect(containersList[2].innerHTML).toBe("hey3");
+});
+
+it("should display a code tag", () => {
+  const { container } = render(<App />);
+  fireEvent.change(container.querySelector(".mtr-textarea"), {
+    target: { value: "```var a = [];```\n```b```\n" }
+  });
+  expect( [...container.querySelectorAll("code")].length).toBe(2);
+  expect( container.querySelector("code.mtr-code:first-of-type").innerHTML).toBe("var a = [];\n");
 });
