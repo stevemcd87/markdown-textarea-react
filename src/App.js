@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
@@ -51,10 +51,11 @@ function App() {
     // updates htmlTag & elementText if matchedPattern was found
     if (matchedPattern) {
       htmlTag = matchedPattern.htmlTag(text);
-      if (htmlTag!== "code")elementText = text.replace(
-        text.match(new RegExp(...matchedPattern.regExPattern))[0],
-        ""
-      );
+      if (htmlTag !== "code")
+        elementText = text.replace(
+          text.match(new RegExp(...matchedPattern.regExPattern))[0],
+          ""
+        );
     }
     return { htmlTag, elementText };
   }
@@ -102,7 +103,15 @@ const REGEXPATTERNS = {
 };
 
 const HTMLTAGS = {
-  p: s => (s ? <p className="mtr-p">{s}</p> : false),
+  p: s =>
+    s ? (
+      <p className="mtr-p">
+        {" "}
+        <InlineTag {...{ s }} />
+      </p>
+    ) : (
+      false
+    ),
   h1: s => <h1 className="mtr-h1">{s}</h1>,
   h2: s => <h2 className="mtr-h2">{s}</h2>,
   h3: s => <h3 className="mtr-h3">{s}</h3>,
@@ -113,10 +122,40 @@ const HTMLTAGS = {
   code: code => <CodeTag {...{ code }} />,
   blockquote: s => <blockquote className="mtr-blockquote">{s}</blockquote>
 };
+function InlineTag(props) {
+  let { s } = props,
+    [inlineTags, setInlineTags] = useState([]);
+  useEffect(() => {
+    setInlineTags(s.split(/(\*{1,3}.+?\*{1,3})/));
+  }, [s]);
+  return (
+    <>
+      {inlineTags.map((inlineTag, ind) => {
+        return <DesignateTag key={"" + Date.now + ind} {...{ inlineTag }} />;
+      })}
+    </>
+  );
+  function DesignateTag(props) {
+    let { inlineTag } = props;
+    if (/^\*{3}.+\*{3}/.test(inlineTag)) {
+      return (
+        <strong>
+          <em>{inlineTag.replace(/\*{3}/g, "")}</em>
+        </strong>
+      );
+    } else if (/^\*{2}.+\*{2}/.test(inlineTag)) {
+      return <strong>{inlineTag.replace(/\*{2}/g, "")}</strong>;
+    } else if (/^\*{1}.+\*{1}/.test(inlineTag)) {
+      return <em>{inlineTag.replace(/\*{1}/g, "")}</em>;
+    } else {
+      return <span>{inlineTag}</span>;
+    }
+  }
+}
 
 function CodeTag(props) {
   let { code } = props,
-    displayedCode = code.replace(/```/g,"");
+    displayedCode = code.replace(/```/g, "");
   return (
     <div className="mtr-code-component">
       <code className="mtr-code">{displayedCode}</code>

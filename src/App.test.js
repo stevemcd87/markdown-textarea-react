@@ -46,6 +46,20 @@ it("should display a code tag", () => {
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: { value: "```var a = [];```\n```b```\n" }
   });
-  expect( [...container.querySelectorAll("code")].length).toBe(2);
-  expect( container.querySelector("code.mtr-code:first-of-type").innerHTML).toBe("var a = [];\n");
+  expect([...container.querySelectorAll("code")].length).toBe(2);
+  expect(container.querySelector("code.mtr-code:first-of-type").innerHTML).toBe(
+    "var a = [];\n"
+  );
+});
+
+it("should display a strong and/or em tag", () => {
+  const { container } = render(<App />);
+  fireEvent.change(container.querySelector(".mtr-textarea"), {
+    target: {
+      value: " `hey * hey-em* hey **hey-strong** hey ***hey-st-em*** `"
+    }
+  });
+  expect(container.querySelector("em").innerHTML).toBe(" hey-em");
+  expect(container.querySelector("strong").innerHTML).toBe("hey-strong");
+  expect(container.querySelector("strong em").innerHTML).toBe("hey-st-em");
 });
