@@ -103,15 +103,11 @@ const REGEXPATTERNS = {
 };
 
 const HTMLTAGS = {
-  p: s =>
-    s ? (
-      <p className="mtr-p">
-        {" "}
-        <InlineTag {...{ s }} />
-      </p>
-    ) : (
-      false
-    ),
+  p: s => (
+    <p className="mtr-p">
+      <InlineTag {...{ s }} />
+    </p>
+  ),
   h1: s => <h1 className="mtr-h1">{s}</h1>,
   h2: s => <h2 className="mtr-h2">{s}</h2>,
   h3: s => <h3 className="mtr-h3">{s}</h3>,
@@ -122,11 +118,12 @@ const HTMLTAGS = {
   code: code => <CodeTag {...{ code }} />,
   blockquote: s => <blockquote className="mtr-blockquote">{s}</blockquote>
 };
+
 function InlineTag(props) {
   let { s } = props,
     [inlineTags, setInlineTags] = useState([]);
   useEffect(() => {
-    setInlineTags(s.split(/(\*{1,3}.+?\*{1,3})/));
+    setInlineTags(s.split(/(\*{1,3}.+?\*{1,3})|(\[.+\]\(.+\))/));
   }, [s]);
   return (
     <>
@@ -147,6 +144,12 @@ function InlineTag(props) {
       return <strong>{inlineTag.replace(/\*{2}/g, "")}</strong>;
     } else if (/^\*{1}.+\*{1}/.test(inlineTag)) {
       return <em>{inlineTag.replace(/\*{1}/g, "")}</em>;
+    } else if (/^\[.+\]\(.+\)/.test(inlineTag)) {
+      return (
+        <a href={inlineTag.replace(/\[.+\]\(|\)/g, "")} target="_blank">
+          {inlineTag.replace(/\[|\]\(.+\)/g, "")}
+        </a>
+      );
     } else {
       return <span>{inlineTag}</span>;
     }

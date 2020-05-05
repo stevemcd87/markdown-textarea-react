@@ -63,3 +63,15 @@ it("should display a strong and/or em tag", () => {
   expect(container.querySelector("strong").innerHTML).toBe("hey-strong");
   expect(container.querySelector("strong em").innerHTML).toBe("hey-st-em");
 });
+
+it ("should display a link",()=>{
+  const {container} = render(<App />);
+  fireEvent.change(container.querySelector(".mtr-textarea"), {
+    target: {
+      value: "[hey](https://www.google.com)"
+    }
+  });
+console.log(container.querySelector('a').href);
+  expect(container.querySelector('a').href).toBe("https://www.google.com/")
+
+})
