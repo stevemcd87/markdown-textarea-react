@@ -64,14 +64,22 @@ it("should display a strong and/or em tag", () => {
   expect(container.querySelector("strong em").innerHTML).toBe("hey-st-em");
 });
 
-it ("should display a link",()=>{
-  const {container} = render(<App />);
+it("should display a link", () => {
+  const { container } = render(<App />);
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: {
       value: "[hey](https://www.google.com)"
     }
   });
-console.log(container.querySelector('a').href);
-  expect(container.querySelector('a').href).toBe("https://www.google.com/")
+  expect(container.querySelector("a").href).toBe("https://www.google.com/");
+});
 
-})
+it("should display a sup tag", () => {
+  const { container } = render(<App />);
+  fireEvent.change(container.querySelector(".mtr-textarea"), {
+    target: {
+      value: "5<sup>5</sup>"
+    }
+  });
+  expect(container.querySelector("sup").innerHTML).toBe("5");
+});

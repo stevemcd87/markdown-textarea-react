@@ -102,6 +102,25 @@ const REGEXPATTERNS = {
   }
 };
 
+const INLINEREGEXPATTERNS = {
+  // For Inline HTML elements (span,strong,em,etc...)
+  strongEm: {
+    // for strong, em and strong em
+    regExPattern: "(\\*{1,3}.+?\\*{1,3})"
+    // htmlTag: s => "strongEm"
+  },
+  aTags: {
+    // for links(a tags)
+    regExPattern: "(\\[.+\\]\\(.+\\))"
+    // htmlTag: s => "a"
+  },
+  sup: {
+    // for sup tags
+    regExPattern: "(<sup>.+</sup>)"
+    // htmlTag: s => "sup"
+  }
+};
+
 const HTMLTAGS = {
   p: s => (
     <p className="mtr-p">
@@ -121,10 +140,15 @@ const HTMLTAGS = {
 
 function InlineTag(props) {
   let { s } = props,
+    inlineRegexPatterns = createInlinePattern(INLINEREGEXPATTERNS),
     [inlineTags, setInlineTags] = useState([]);
   useEffect(() => {
-    setInlineTags(s.split(/(\*{1,3}.+?\*{1,3})|(\[.+\]\(.+\))/));
+    setInlineTags(s.split(new RegExp(inlineRegexPatterns)));
   }, [s]);
+  // useEffect(()=>{
+  //   console.log('inlineTags');
+  //   console.log(inlineTags);
+  // },[inlineTags])
   return (
     <>
       {inlineTags.map((inlineTag, ind) => {
@@ -132,27 +156,40 @@ function InlineTag(props) {
       })}
     </>
   );
-  function DesignateTag(props) {
-    let { inlineTag } = props;
-    if (/^\*{3}.+\*{3}/.test(inlineTag)) {
-      return (
-        <strong>
-          <em>{inlineTag.replace(/\*{3}/g, "")}</em>
-        </strong>
-      );
-    } else if (/^\*{2}.+\*{2}/.test(inlineTag)) {
-      return <strong>{inlineTag.replace(/\*{2}/g, "")}</strong>;
-    } else if (/^\*{1}.+\*{1}/.test(inlineTag)) {
-      return <em>{inlineTag.replace(/\*{1}/g, "")}</em>;
-    } else if (/^\[.+\]\(.+\)/.test(inlineTag)) {
-      return (
-        <a href={inlineTag.replace(/\[.+\]\(|\)/g, "")} target="_blank">
-          {inlineTag.replace(/\[|\]\(.+\)/g, "")}
-        </a>
-      );
-    } else {
-      return <span>{inlineTag}</span>;
-    }
+}
+
+function createInlinePattern(patterns) {
+  return Object.values(patterns).reduce((t, v, i) => {
+    // Adds the "or" symbol if not the first item
+    let prepend = i !== 0 ? "|" : "";
+    return (t += prepend + v.regExPattern);
+  }, "");
+}
+
+function DesignateTag(props) {
+  let { inlineTag } = props;
+  if (/^\*{3}.+\*{3}/.test(inlineTag)) {
+    return (
+      <strong className="mtr-strong">
+        <em className="mtr-em">{inlineTag.replace(/\*{3}/g, "")}</em>
+      </strong>
+    );
+  } else if (/^\*{2}.+\*{2}/.test(inlineTag)) {
+    return (
+      <strong className="mtr-strong">{inlineTag.replace(/\*{2}/g, "")}</strong>
+    );
+  } else if (/^\*{1}.+\*{1}/.test(inlineTag)) {
+    return <em className="mtr-em">{inlineTag.replace(/\*{1}/g, "")}</em>;
+  } else if (/<sup>|<\/sup>/.test(inlineTag)) {
+    return <sup className="mtr-sup">{inlineTag.replace(/<sup>|<\/sup>/g, "")}</sup>;
+  } else if (/^\[.+\]\(.+\)/.test(inlineTag)) {
+    return (
+      <a href={inlineTag.replace(/\[.+\]\(|\)/g, "")} target="_blank">
+        {inlineTag.replace(/\[|\]\(.+\)/g, "")}
+      </a>
+    );
+  } else {
+    return <span>{inlineTag}</span>;
   }
 }
 
