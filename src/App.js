@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+// ===== Components ======
+import UlTag from "./components/UlTag";
 import "./App.css";
 
 function App() {
@@ -181,49 +183,7 @@ const HTMLTAGS = {
   )
 };
 
-function UlTag(props) {
-  let { ul } = props,
-    [liTags, setLiTags] = useState([]);
-  useEffect(() => {
-    // console.log("ul");
-    // console.log(ul);
-    setLiTags(createLiTags(ul));
-  }, [ul]);
-  useEffect(() => {
-    console.log("iTags");
-    console.log(liTags);
-    // setLiTags(createLiTags(ul));
-  }, [liTags]);
-  return (
-    <ul className="mtr-ul">
-      {liTags.map((li, ind) => (
-        <LiTag key={"" + Date.now() + ind} {...{ li }} />
-      ))}
-    </ul>
-  );
-  function createLiTags(list) {
-    let nested = /^\s{2}\-\s/.test(list),
-      regex = nested
-        ? "(^\\s{2}\\-s.*)+"
-        : "(^\\-\\s.+\\n)|(^\\-\\s.+\\n)(?<=^\\-\\s.+\\n)(^\\s{2}\\-\\s.+\\s)+?";
-    return list.split(new RegExp(regex, "gm"));
-  }
-}
 
-function LiTag(props) {
-  let { li } = props,
-    [nestedPortion, setNestedPortion] = useState("");
-  useEffect(() => {
-    if (li) setNestedPortion(li.match(/(^\s{2}\-\s)+/gm));
-  }, []);
-  if (!li) return "";
-  if (nestedPortion) return <UlTag ul={li.replace(/(^\s{2})+/gm, "")} />;
-  return (
-    <li className="mtr-li">
-      {li.replace(/^\-\s/, "").replace(/(^\s{2}\-\s.+)+/gm,"")}
-    </li>
-  );
-}
 // {nestedPortion ? <UlTag ul={nestedPortion} /> : ""}
 
 function InlineTag(props) {
