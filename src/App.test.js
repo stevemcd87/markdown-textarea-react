@@ -45,14 +45,15 @@ it("should display li tags", () => {
   const { container } = render(<App />);
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: {
-      value: "- hey1\n* hey2\n+ hey3"
+      value: "- hey1\n- hey2\n  - hey21\n- hey3\n"
     }
   });
-  const containersList = [...container.querySelectorAll("li")];
-  expect(containersList.length).toBe(3);
-  expect(containersList[0].innerHTML).toBe("hey1");
-  expect(containersList[1].innerHTML).toBe("hey2");
-  expect(containersList[2].innerHTML).toBe("hey3");
+  let containersList = [...container.querySelector("ul").querySelectorAll("li")];
+  expect(containersList.length).toBe(4);
+  expect(containersList[0].innerHTML).toBe("hey1\n");
+  expect(containersList[1].innerHTML).toBe("hey2\n");
+  expect(containersList[2].innerHTML).toBe("hey21\n");
+  expect(containersList[3].innerHTML).toBe("hey3\n");
 });
 
 it("should display a code tag", () => {

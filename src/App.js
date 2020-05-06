@@ -15,13 +15,34 @@ function App() {
     let textValue = e.target.value,
       // An array of all code markdown found
       codeBlocks = findCodeBlocks(textValue),
+      uls = findUL(textValue),
       // Split textarea's value by linebreaks
-      lineBreaks = removeCodeBlocks(textValue).split(/\n/g);
+      lineBreaks = removeUL(removeCodeBlocks(textValue)).split(/\n/g);
     if (codeBlocks) lineBreaks = returnCodeBlocks(codeBlocks, lineBreaks);
+    if (uls) lineBreaks = returnUL(uls, lineBreaks);
+    // if (uls.length) lineBreaks = returnUL(uls, lineBreaks);
     // Wrap each line break with a designated element
     const markdownRows = lineBreaks.map(designateElement);
 
     setHtmlElements(markdownRows);
+  }
+
+  function findUL(textValue) {
+    let ulPattern = new RegExp(...REGEXPATTERNS.ul.regExPattern);
+    return textValue.match(ulPattern);
+  }
+  function removeUL(textValue) {
+    let ulPattern = new RegExp(...REGEXPATTERNS.ul.regExPattern);
+    // Removes code blocks and replaces with <MTR-code-MTR> for placement
+    return textValue.replace(ulPattern, "\n<MTR-ul-MTR>\n");
+  }
+  function returnUL(uls, lineBreaks) {
+    let lb = lineBreaks.slice();
+    uls.forEach(ul => {
+      let index = lb.findIndex(v => v && v === "<MTR-ul-MTR>");
+      if (index) lb[index] = ul;
+    });
+    return lb;
   }
 
   function findCodeBlocks(textValue) {
@@ -51,7 +72,7 @@ function App() {
     // updates htmlTag & elementText if matchedPattern was found
     if (matchedPattern) {
       htmlTag = matchedPattern.htmlTag(text);
-      if (htmlTag !== "code")
+      if (htmlTag !== "code" && htmlTag !== "ul")
         elementText = text.replace(
           text.match(new RegExp(...matchedPattern.regExPattern))[0],
           ""
@@ -92,13 +113,21 @@ const REGEXPATTERNS = {
     regExPattern: ["^>\\s"],
     htmlTag: s => "blockquote"
   },
-  list: {
-    regExPattern: ["^(-|\\*|\\+)\\s"],
-    htmlTag: s => "li"
-  },
+  // (((^\-\s.+\n)*((?<=^\-\s.+\n)(^\s{2}\-\s.+\s)*)?)*)
+  // list: {
+  //   regExPattern: ["^(-|\\*|\\+)\\s", "m"],
+  //   htmlTag: s => "li"
+  // },
   code: {
-    regExPattern: ["```\\n(.|\n)*\\n```", "g"],
+    regExPattern: ["^```\\n(.|\\n)*\\n```", "g"],
     htmlTag: s => "code"
+  },
+  ul: {
+    regExPattern: [
+      "(((^\\-\\s.+\\n)+((?<=^\\-\\s.+\\n)(^\\s{2}\\-\\s.+\\s)*)?)+)",
+      "gm"
+    ],
+    htmlTag: s => "ul"
   }
 };
 
@@ -138,11 +167,12 @@ const HTMLTAGS = {
       <InlineTag {...{ s }} />
     </h6>
   ),
-  li: s => (
-    <li className="mtr-li">
-      <InlineTag {...{ s }} />
-    </li>
-  ),
+  // li: s => (
+  //   <li className="mtr-li">
+  //     <InlineTag {...{ s }} />
+  //   </li>
+  // ),
+  ul: ul => <UlTag {...{ ul }} />,
   code: code => <CodeTag {...{ code }} />,
   blockquote: s => (
     <blockquote className="mtr-blockquote">
@@ -151,6 +181,51 @@ const HTMLTAGS = {
   )
 };
 
+function UlTag(props) {
+  let { ul } = props,
+    [liTags, setLiTags] = useState([]);
+  useEffect(() => {
+    // console.log("ul");
+    // console.log(ul);
+    setLiTags(createLiTags(ul));
+  }, [ul]);
+  useEffect(() => {
+    console.log("iTags");
+    console.log(liTags);
+    // setLiTags(createLiTags(ul));
+  }, [liTags]);
+  return (
+    <ul className="mtr-ul">
+      {liTags.map((li, ind) => (
+        <LiTag key={"" + Date.now() + ind} {...{ li }} />
+      ))}
+    </ul>
+  );
+  function createLiTags(list) {
+    let nested = /^\s{2}\-\s/.test(list),
+      regex = nested
+        ? "(^\\s{2}\\-s.*)+"
+        : "(^\\-\\s.+\\n)|(^\\-\\s.+\\n)(?<=^\\-\\s.+\\n)(^\\s{2}\\-\\s.+\\s)+?";
+    return list.split(new RegExp(regex, "gm"));
+  }
+}
+
+function LiTag(props) {
+  let { li } = props,
+    [nestedPortion, setNestedPortion] = useState("");
+  useEffect(() => {
+    if (li) setNestedPortion(li.match(/(^\s{2}\-\s)+/gm));
+  }, []);
+  if (!li) return "";
+  if (nestedPortion) return <UlTag ul={li.replace(/(^\s{2})+/gm, "")} />;
+  return (
+    <li className="mtr-li">
+      {li.replace(/^\-\s/, "").replace(/(^\s{2}\-\s.+)+/gm,"")}
+    </li>
+  );
+}
+// {nestedPortion ? <UlTag ul={nestedPortion} /> : ""}
+
 function InlineTag(props) {
   let { s } = props,
     inlineRegexPatterns = createInlinePattern(INLINEREGEXPATTERNS),
@@ -158,10 +233,6 @@ function InlineTag(props) {
   useEffect(() => {
     setInlineTags(s.split(new RegExp(inlineRegexPatterns)));
   }, [s]);
-  // useEffect(()=>{
-  //   console.log('inlineTags');
-  //   console.log(inlineTags);
-  // },[inlineTags])
   return (
     <>
       {inlineTags.map((inlineTag, ind) => {
@@ -275,7 +346,10 @@ function DesignateTag(props) {
 
 function CodeTag(props) {
   let { code } = props,
-    displayedCode = code.replace(/```/g,"").split(/\n/g).filter(v=>v);
+    displayedCode = code
+      .replace(/```/g, "")
+      .split(/\n/g)
+      .filter(v => v);
   return (
     <div className="mtr-code-component">
       <code className="mtr-code">
