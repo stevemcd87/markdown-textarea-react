@@ -4,17 +4,31 @@ import App from "./App";
 
 it("should display h1 - h6 tags", () => {
   const { container } = render(<App />);
+  let val = {
+    h1WithEm: "# *hey1*\n",
+    h2WithStrong:"## **hey2**\n",
+    h3WithStrongEm: "### ***hey3***\n",
+    h4WithATag:"#### [hey4](https://google.com)\n",
+    h5WithSupNSub: "##### hey<sup>1</sup> hey<sub>2</sub>\n",
+    h6:"###### hey6\n",
+  };
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: {
-      value: "# hey1\n## hey2\n### hey3\n#### hey4\n##### hey5\n###### hey6"
+      value: Object.values(val).join("")
     }
   });
-  expect(container.querySelector("h1").innerHTML).toBe("hey1");
-  expect(container.querySelector("h2").innerHTML).toBe("hey2");
-  expect(container.querySelector("h3").innerHTML).toBe("hey3");
-  expect(container.querySelector("h4").innerHTML).toBe("hey4");
-  expect(container.querySelector("h5").innerHTML).toBe("hey5");
-  expect(container.querySelector("h6").innerHTML).toBe("hey6");
+  expect(container.querySelector(".mtr-h1 .mtr-em").innerHTML).toBe("hey1");
+  expect(container.querySelector(".mtr-h2 .mtr-strong").innerHTML).toBe("hey2");
+  expect(container.querySelector(".mtr-h3 .mtr-strong .mtr-em").innerHTML).toBe(
+    "hey3"
+  );
+  expect(container.querySelector(".mtr-h4 .mtr-a").href).toBe(
+    "https://google.com/"
+  );
+  expect(container.querySelector(".mtr-h4 .mtr-a").innerHTML).toBe("hey4");
+  expect(container.querySelector(".mtr-h5 .mtr-sup").innerHTML).toBe("1");
+    expect(container.querySelector(".mtr-h5 .mtr-sub").innerHTML).toBe("2");
+  expect(container.querySelector(".mtr-h6").innerHTML).toBe("hey6");
 });
 
 it("should display a blockquote tag", () => {
