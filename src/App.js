@@ -97,7 +97,7 @@ const REGEXPATTERNS = {
     htmlTag: s => "li"
   },
   code: {
-    regExPattern: ["```\\s*.*\\s*```\\n", "g"],
+    regExPattern: ["```\\n(.|\n)*\\n```", "g"],
     htmlTag: s => "code"
   }
 };
@@ -144,7 +144,11 @@ const HTMLTAGS = {
     </li>
   ),
   code: code => <CodeTag {...{ code }} />,
-  blockquote: s => <blockquote className="mtr-blockquote">{s}</blockquote>
+  blockquote: s => (
+    <blockquote className="mtr-blockquote">
+      <InlineTag {...{ s }} />
+    </blockquote>
+  )
 };
 
 function InlineTag(props) {
@@ -271,12 +275,24 @@ function DesignateTag(props) {
 
 function CodeTag(props) {
   let { code } = props,
-    displayedCode = code.replace(/```/g, "");
+    displayedCode = code.replace(/```/g,"").split(/\n/g).filter(v=>v);
   return (
     <div className="mtr-code-component">
-      <code className="mtr-code">{displayedCode}</code>
+      <code className="mtr-code">
+        {displayedCode.map((codeLine, ind) => {
+          return (
+            <span key={"" + Date.now() + ind}>
+              {codeLine}
+              <br />
+            </span>
+          );
+        })}
+      </code>
     </div>
   );
+  function displayCode() {
+    return;
+  }
 }
 
 export default App;

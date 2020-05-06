@@ -58,11 +58,11 @@ it("should display li tags", () => {
 it("should display a code tag", () => {
   const { container } = render(<App />);
   fireEvent.change(container.querySelector(".mtr-textarea"), {
-    target: { value: "```var a = [];```\n```b```\n" }
+    target: { value: "```\nvar a = [];\nvar b = 2;\n```\n" }
   });
-  expect([...container.querySelectorAll("code")].length).toBe(2);
-  expect(container.querySelector("code.mtr-code:first-of-type").innerHTML).toBe(
-    "var a = [];\n"
+  // expect([...container.querySelectorAll("code")].length).toBe(2);
+  expect(container.querySelector("code").innerHTML).toBe(
+    "<span>var a = [];<br></span><span>var b = 2;<br></span>"
   );
 });
 
