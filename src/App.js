@@ -118,6 +118,11 @@ const INLINEREGEXPATTERNS = {
     // for sup tags
     regExPattern: "(<sup>.+</sup>)"
     // htmlTag: s => "sup"
+  },
+  sub: {
+    // for sub tags
+    regExPattern: "(<sub>.+</sub>)"
+    // htmlTag: s => "sub"
   }
 };
 
@@ -180,11 +185,17 @@ function DesignateTag(props) {
     );
   } else if (/^\*{1}.+\*{1}/.test(inlineTag)) {
     return <em className="mtr-em">{inlineTag.replace(/\*{1}/g, "")}</em>;
-  } else if (/<sup>|<\/sup>/.test(inlineTag)) {
-    return <sup className="mtr-sup">{inlineTag.replace(/<sup>|<\/sup>/g, "")}</sup>;
+  } else if (/<sup>.+<\/sup>/.test(inlineTag)) {
+    return (
+      <sup className="mtr-sup">{inlineTag.replace(/<sup>|<\/sup>/g, "")}</sup>
+    );
+  } else if (/<sub>.+<\/sub>/.test(inlineTag)) {
+    return (
+      <sub className="mtr-sub">{inlineTag.replace(/<sub>|<\/sub>/g, "")}</sub>
+    );
   } else if (/^\[.+\]\(.+\)/.test(inlineTag)) {
     return (
-      <a href={inlineTag.replace(/\[.+\]\(|\)/g, "")} target="_blank">
+      <a className="mtr-a" href={inlineTag.replace(/\[.+\]\(|\)/g, "")} target="_blank">
         {inlineTag.replace(/\[|\]\(.+\)/g, "")}
       </a>
     );

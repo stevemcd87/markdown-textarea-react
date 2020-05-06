@@ -83,3 +83,32 @@ it("should display a sup tag", () => {
   });
   expect(container.querySelector("sup").innerHTML).toBe("5");
 });
+
+it("should display a sub tag", () => {
+  const { container } = render(<App />);
+  fireEvent.change(container.querySelector(".mtr-textarea"), {
+    target: {
+      value: "5<sub>6</sub>"
+    }
+  });
+  expect(container.querySelector(".mtr-sub").innerHTML).toBe("6");
+});
+
+it("should display all inline tags", () => {
+  const { container } = render(<App />);
+  fireEvent.change(container.querySelector(".mtr-textarea"), {
+    target: {
+      value:
+        " * hey-em* hey **hey-strong** hey ***hey-st-em*** [hey](https://www.google.com) 5<sup> 7</sup> 5<sub>6</sub>"
+    }
+  });
+  expect(container.querySelector("em").innerHTML).toBe(" hey-em");
+  expect(container.querySelector("strong").innerHTML).toBe("hey-strong");
+  expect(container.querySelector("strong em").innerHTML).toBe("hey-st-em");
+  expect(container.querySelector(".mtr-a").href).toBe(
+    "https://www.google.com/"
+  );
+  expect(container.querySelector(".mtr-a").innerHTML).toBe("hey");
+  expect(container.querySelector(".mtr-sup").innerHTML).toBe(" 7");
+  expect(container.querySelector(".mtr-sub").innerHTML).toBe("6");
+});
