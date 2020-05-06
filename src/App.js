@@ -102,30 +102,6 @@ const REGEXPATTERNS = {
   }
 };
 
-const INLINEREGEXPATTERNS = {
-  // For Inline HTML elements (span,strong,em,etc...)
-  strongEm: {
-    // for strong, em and strong em
-    regExPattern: "(\\*{1,3}.+?\\*{1,3})"
-    // htmlTag: s => "strongEm"
-  },
-  aTags: {
-    // for links(a tags)
-    regExPattern: "(\\[.+\\]\\(.+\\))"
-    // htmlTag: s => "a"
-  },
-  sup: {
-    // for sup tags
-    regExPattern: "(<sup>.+</sup>)"
-    // htmlTag: s => "sup"
-  },
-  sub: {
-    // for sub tags
-    regExPattern: "(<sub>.+</sub>)"
-    // htmlTag: s => "sub"
-  }
-};
-
 const HTMLTAGS = {
   p: s => (
     <p className="mtr-p">
@@ -163,44 +139,105 @@ function InlineTag(props) {
   );
 }
 
+const INLINEREGEXPATTERNS = {
+  // For Inline HTML elements (span,strong,em,etc...)
+  strongEm: {
+    regExPattern: "(\\*{1,3}.+?\\*{1,3})",
+    testPattern: ["\\*{3}.+?\\*{3}"],
+    replacePattern: ["\\*{3}", "g"],
+    htmlTag: s => "strongEm"
+  },
+  strong: {
+    testPattern: ["\\*{2}.+?\\*{2}"],
+    htmlTag: s => "strong",
+    replacePattern: ["\\*{2}", "g"]
+  },
+  em: {
+    testPattern: ["\\*{1}.+?\\*{1}"],
+    replacePattern: ["\\*", "g"],
+    htmlTag: s => "em"
+  },
+  a: {
+    regExPattern: "(\\[.+\\]\\(.+\\))",
+    testPattern: ["\\[.+\\]\\(.+\\)"],
+    replacePatternHREF: ["\\[.+\\]\\(|\\)", "g"],
+    replacePatternText: ["\\[|\\](.+)", "g"],
+    htmlTag: s => "a"
+  },
+  sup: {
+    regExPattern: "(<sup>.+</sup>)",
+    testPattern: ["<sup>.+<\\/sup>"],
+    replacePattern: ["<sup>|<\\/sup>", "g"],
+    htmlTag: s => "sup"
+  },
+  sub: {
+    regExPattern: "(<sub>.+</sub>)",
+    testPattern: ["<sub>.+<\\/sub>"],
+    replacePattern: ["<sub>|<\\/sub>", "g"],
+    htmlTag: s => "sub"
+  }
+};
+
+const INLINEHTMLTAGS = {
+  strongEm: s => (
+    <strong className="mtr-strong">
+      <em className="mtr-em">{updateTagString("strongEm", s)}</em>
+    </strong>
+  ),
+  strong: s => (
+    <strong className="mtr-strong">{updateTagString("strong", s)}</strong>
+  ),
+  em: s => <em className="mtr-em">{updateTagString("em", s)}</em>,
+  a: s => (
+    <a className="mtr-a" href={updateATag("a", "href", s)} target="_blank">
+      {updateATag("a", "text", s)}
+    </a>
+  ),
+  sup: s => <sup className="mtr-sup">{updateTagString("sup", s)}</sup>,
+  sub: s => <sub className="mtr-sub">{updateTagString("sub", s)}</sub>
+};
+
+function updateATag(key, attr, string) {
+  if (attr === "href")
+    return string.replace(
+      new RegExp(...INLINEREGEXPATTERNS[key].replacePatternHREF),
+      ""
+    );
+  else
+    return string.replace(
+      new RegExp(...INLINEREGEXPATTERNS[key].replacePatternText),
+      ""
+    );
+}
+
+function updateTagString(key, string) {
+  return string.replace(
+    new RegExp(...INLINEREGEXPATTERNS[key].replacePattern),
+    ""
+  );
+}
+
 function createInlinePattern(patterns) {
   return Object.values(patterns).reduce((t, v, i) => {
     // Adds the "or" symbol if not the first item
     let prepend = i !== 0 ? "|" : "";
-    return (t += prepend + v.regExPattern);
+    return v.regExPattern ? (t += prepend + v.regExPattern) : t;
   }, "");
 }
 
 function DesignateTag(props) {
-  let { inlineTag } = props;
-  if (/^\*{3}.+\*{3}/.test(inlineTag)) {
-    return (
-      <strong className="mtr-strong">
-        <em className="mtr-em">{inlineTag.replace(/\*{3}/g, "")}</em>
-      </strong>
-    );
-  } else if (/^\*{2}.+\*{2}/.test(inlineTag)) {
-    return (
-      <strong className="mtr-strong">{inlineTag.replace(/\*{2}/g, "")}</strong>
-    );
-  } else if (/^\*{1}.+\*{1}/.test(inlineTag)) {
-    return <em className="mtr-em">{inlineTag.replace(/\*{1}/g, "")}</em>;
-  } else if (/<sup>.+<\/sup>/.test(inlineTag)) {
-    return (
-      <sup className="mtr-sup">{inlineTag.replace(/<sup>|<\/sup>/g, "")}</sup>
-    );
-  } else if (/<sub>.+<\/sub>/.test(inlineTag)) {
-    return (
-      <sub className="mtr-sub">{inlineTag.replace(/<sub>|<\/sub>/g, "")}</sub>
-    );
-  } else if (/^\[.+\]\(.+\)/.test(inlineTag)) {
-    return (
-      <a className="mtr-a" href={inlineTag.replace(/\[.+\]\(|\)/g, "")} target="_blank">
-        {inlineTag.replace(/\[|\]\(.+\)/g, "")}
-      </a>
-    );
-  } else {
-    return <span>{inlineTag}</span>;
+  let { inlineTag } = props,
+    testPatterns = createTestPatterns(INLINEREGEXPATTERNS),
+    selectedPattern = findPattern(testPatterns);
+  if (selectedPattern) {
+    return INLINEHTMLTAGS[selectedPattern.htmlTag(inlineTag)](inlineTag);
+  }
+  return <span>{inlineTag ? inlineTag : ""}</span>;
+  function createTestPatterns(patterns) {
+    return Object.values(patterns);
+  }
+  function findPattern(patterns) {
+    return patterns.find(p => new RegExp(p.testPattern).test(inlineTag));
   }
 }
 
