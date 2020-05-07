@@ -4,12 +4,16 @@ import UlTag from "./components/UlTag";
 import CodeTag from "./components/CodeTag";
 import Preview from "./components/Preview/Preview";
 // ==== VARIABLES ===
-import HTMLTAGS from "./variables/HTMLTAGS.js"
-import REGEXPATTERNS from "./variables/REGEXPATTERNS.js"
-import INLINEHTMLTAGS from "./variables/INLINEHTMLTAGS.js"
-import INLINEREGEXPATTERNS from "./variables/INLINEREGEXPATTERNS.js"
+import HTMLTAGS from "./variables/HTMLTAGS.js";
+import REGEXPATTERNS from "./variables/REGEXPATTERNS.js";
+import INLINEHTMLTAGS from "./variables/INLINEHTMLTAGS.js";
+import INLINEREGEXPATTERNS from "./variables/INLINEREGEXPATTERNS.js";
 import "./App.css";
 
+const PatternsToSplit = Object.values(REGEXPATTERNS).reduce((t, v, i) => {
+  let prepend = i > 0 ? "|" : "";
+  return (t += prepend + v.regExPattern[0]);
+}, "");
 function App() {
   let [htmlElements, setHtmlElements] = useState([]);
   return (
@@ -20,55 +24,36 @@ function App() {
   );
 
   function updatePreview(e) {
-    // TODO:
     let textValue = e.target.value,
-      // An array of all code markdown found
-      codeBlocks = findCodeBlocks(textValue),
-      uls = findUL(textValue),
-      // Split textarea's value by linebreaks
-      lineBreaks = removeUL(removeCodeBlocks(textValue)).split(/\n/g);
-    if (codeBlocks) lineBreaks = returnCodeBlocks(codeBlocks, lineBreaks);
-    if (uls) lineBreaks = returnUL(uls, lineBreaks);
-    // if (uls.length) lineBreaks = returnUL(uls, lineBreaks);
+      savedPatterns = savePatterns(textValue),
+      lineBreaks = createLineBreaks(savedPatterns);
     // Wrap each line break with a designated element
     const markdownRows = lineBreaks.map(designateElement);
-
     setHtmlElements(markdownRows);
   }
 
-  function findUL(textValue) {
-    let ulPattern = new RegExp(...REGEXPATTERNS.ul.regExPattern);
-    return textValue.match(ulPattern);
+  function savePatterns(textToSearch) {
+    return Object.values(MULTILINEPATTERNS).reduce(
+      (t, v) => {
+        let pattern = new RegExp(...v.regExPattern),
+          matches = textToSearch.match(pattern);
+        t[v.replaceTag] = matches;
+        t["textValue"] = t["textValue"].replace(pattern, `\n${v.replaceTag}\n`);
+        return t;
+      },
+      { textValue: textToSearch }
+    );
   }
-  function removeUL(textValue) {
-    let ulPattern = new RegExp(...REGEXPATTERNS.ul.regExPattern);
-    // Removes code blocks and replaces with <MTR-code-MTR> for placement
-    return textValue.replace(ulPattern, "\n<MTR-ul-MTR>\n");
-  }
-  function returnUL(uls, lineBreaks) {
-    let lb = lineBreaks.slice();
-    uls.forEach(ul => {
-      let index = lb.findIndex(v => v && v === "<MTR-ul-MTR>");
-      if (index) lb[index] = ul;
+  function createLineBreaks(sp) {
+    let lineBreaks = sp.textValue.split(/\n/g);
+    Object.values(MULTILINEPATTERNS).forEach(patt => {
+      let matches = sp[patt.replaceTag] ? sp[patt.replaceTag] : [];
+      matches.forEach(match => {
+        let ind = lineBreaks.findIndex(v => v === patt.replaceTag);
+        if (ind > -1) lineBreaks[ind] = match;
+      });
     });
-    return lb;
-  }
-
-  function findCodeBlocks(textValue) {
-    let codePattern = new RegExp(...REGEXPATTERNS.code.regExPattern);
-    return textValue.match(codePattern);
-  }
-  function removeCodeBlocks(textValue) {
-    let codePattern = new RegExp(...REGEXPATTERNS.code.regExPattern);
-    // Removes code blocks and replaces with <MTR-code-MTR> for placement
-    return textValue.replace(codePattern, "\n<MTR-code-MTR>\n");
-  }
-  function returnCodeBlocks(codeBlocks, lineBreaks) {
-    let lb = lineBreaks.slice();
-    codeBlocks.forEach(cb => {
-      lb[lb.findIndex(v => v === "<MTR-code-MTR>")] = cb;
-    });
-    return lb;
+    return lineBreaks;
   }
 
   function designateElement(text) {
@@ -96,13 +81,19 @@ function App() {
       return text.match(new RegExp(...pattObject.regExPattern));
     });
   }
-}
+} // end of App component
 
-
-
-
-
-
-
-
+const MULTILINEPATTERNS = {
+  code: {
+    regExPattern: ["^```\\n(.|\\n)*\\n```\\n", "g"],
+    replaceTag: "<MTR-code-MTR>"
+  },
+  ul: {
+    regExPattern: [
+      "(((^\\-\\s.+\\n)+((?<=^\\-\\s.+\\n)(^\\s{2}\\-\\s.+\\s)*)?)+)",
+      "gm"
+    ],
+    replaceTag: "<MTR-ul-MTR>"
+  }
+};
 export default App;

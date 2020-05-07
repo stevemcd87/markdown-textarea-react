@@ -6,11 +6,11 @@ it("should display h1 - h6 tags", () => {
   const { container } = render(<App />);
   let val = {
     h1WithEm: "# *hey1*\n",
-    h2WithStrong:"## **hey2**\n",
+    h2WithStrong: "## **hey2**\n",
     h3WithStrongEm: "### ***hey3***\n",
-    h4WithATag:"#### [hey4](https://google.com)\n",
+    h4WithATag: "#### [hey4](https://google.com)\n",
     h5WithSupNSub: "##### hey<sup>1</sup> hey<sub>2</sub>\n",
-    h6:"###### hey6\n",
+    h6: "###### hey6\n"
   };
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: {
@@ -27,7 +27,7 @@ it("should display h1 - h6 tags", () => {
   );
   expect(container.querySelector(".mtr-h4 .mtr-a").innerHTML).toBe("hey4");
   expect(container.querySelector(".mtr-h5 .mtr-sup").innerHTML).toBe("1");
-    expect(container.querySelector(".mtr-h5 .mtr-sub").innerHTML).toBe("2");
+  expect(container.querySelector(".mtr-h5 .mtr-sub").innerHTML).toBe("2");
   expect(container.querySelector(".mtr-h6").innerHTML).toBe("hey6");
 });
 
@@ -48,7 +48,9 @@ it("should display li tags", () => {
       value: "- hey1\n- hey2\n  - hey21\n- hey3\n"
     }
   });
-  let containersList = [...container.querySelector("ul").querySelectorAll("li")];
+  let containersList = [
+    ...container.querySelector("ul").querySelectorAll("li")
+  ];
   expect(containersList.length).toBe(4);
   expect(containersList[0].innerHTML).toBe("hey1\n");
   expect(containersList[1].innerHTML).toBe("hey2\n");
@@ -126,4 +128,19 @@ it("should display all inline tags", () => {
   expect(container.querySelector(".mtr-a").innerHTML).toBe("hey");
   expect(container.querySelector(".mtr-sup").innerHTML).toBe(" 7");
   expect(container.querySelector(".mtr-sub").innerHTML).toBe("6");
+});
+
+it("should display h1, ul, and code tags", () => {
+  const { container } = render(<App />);
+  fireEvent.change(container.querySelector(".mtr-textarea"), {
+    target: {
+      value: "```\nvar a = [];\nvar b = 2;\n```\n# hey 1\n- list1\n"
+    }
+  });
+  expect(container.querySelector("code").innerHTML).toBe(
+    "<span>var a = [];<br></span><span>var b = 2;<br></span>"
+  );
+  expect(container.querySelector("h1").innerHTML).toBe("hey 1");
+  expect(container.querySelector("ul li").innerHTML).toBe("list1\n");
+
 });

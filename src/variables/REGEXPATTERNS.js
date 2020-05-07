@@ -8,12 +8,12 @@ const REGEXPATTERNS = {
     htmlTag: s => "blockquote"
   },
   code: {
-    regExPattern: ["^```\\n(.|\\n)*\\n```", "g"],
+    regExPattern: ["^```\\n(.|\\n)+\\n```\n", "g"],
     htmlTag: s => "code"
   },
   ul: {
     regExPattern: [
-      "(((^\\-\\s.+\\n)+((?<=^\\-\\s.+\\n)(^\\s{2}\\-\\s.+\\s)*)?)+)",
+      "(^\\-\\s.+\\n+((?<=^\\-\\s.+\\n)(^\\s{2}\\-\\s.+\\s)+)?)+",
       "gm"
     ],
     htmlTag: s => "ul"
