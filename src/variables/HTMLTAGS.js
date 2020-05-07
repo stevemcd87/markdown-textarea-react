@@ -1,14 +1,18 @@
-import React from 'react';
+import React from "react";
 import InlineTag from "../components/InlineTag";
 import UlTag from "../components/UlTag";
 import CodeTag from "../components/CodeTag";
 
 const HTMLTAGS = {
-  p: s => (
-    <p className="mtr-p">
-      <InlineTag {...{ s }} />
-    </p>
-  ),
+  p: s => {
+    if (s) {
+      return (
+        <p className="mtr-p">
+          <InlineTag {...{ s }} />
+        </p>
+      );
+    }
+  },
   h1: s => (
     <h1 className="mtr-h1">
       <InlineTag {...{ s }} />

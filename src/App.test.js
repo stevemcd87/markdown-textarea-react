@@ -160,7 +160,7 @@ it("should be able to do multiple code tags", () => {
   expect(container.querySelector("ul li").innerHTML).toBe("list1\n");
 });
 
-it("li should be able to display inline tags", () => {
+it("li should be able to display inline tags in ul", () => {
   const { container } = render(<App />);
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: {
@@ -172,4 +172,19 @@ it("li should be able to display inline tags", () => {
   expect(li[0].querySelector(".mtr-em").innerHTML).toBe("hey");
   expect(li[1].querySelector(".mtr-strong").innerHTML).toBe("hey2");
   expect(li[2].querySelector(".mtr-strong > .mtr-em").innerHTML).toBe("hey23");
+});
+
+it("li should be able to display multiple of the same inline tags", () => {
+  const { container } = render(<App />);
+  fireEvent.change(container.querySelector(".mtr-textarea"), {
+    target: {
+      value: "*hey* **hey2** ***hey23*** *hey* **hey2** ***hey23***"
+    }
+  });
+  // let li = [...container.querySelectorAll("em")];
+  // expect(li.length).toBe(3);
+  expect(container.querySelectorAll("em").length).toBe(4);
+    expect(container.querySelectorAll("strong").length).toBe(4);
+  // expect(li[1].querySelector(".mtr-strong").innerHTML).toBe("hey2");
+  // expect(li[2].querySelector(".mtr-strong > .mtr-em").innerHTML).toBe("hey23");
 });
