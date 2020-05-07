@@ -144,3 +144,19 @@ it("should display h1, ul, and code tags", () => {
   expect(container.querySelector("ul li").innerHTML).toBe("list1\n");
 
 });
+
+it("should be able to do multiple code tags", () => {
+  const { container } = render(<App />);
+  fireEvent.change(container.querySelector(".mtr-textarea"), {
+    target: {
+      value: "```\nvar a = [];\nvar b = 2;\n```\n# hey 1\n- list1\n```\nvar a = [];\nvar b = 2;\n```\n"
+    }
+  });
+  expect(container.querySelectorAll("code").length).toBe(2)
+  expect(container.querySelector("code").innerHTML).toBe(
+    "<span>var a = [];<br></span><span>var b = 2;<br></span>"
+  );
+  expect(container.querySelector("h1").innerHTML).toBe("hey 1");
+  expect(container.querySelector("ul li").innerHTML).toBe("list1\n");
+
+});

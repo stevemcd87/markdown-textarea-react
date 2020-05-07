@@ -85,7 +85,7 @@ function App() {
 
 const MULTILINEPATTERNS = {
   code: {
-    regExPattern: ["^```\\n(.|\\n)*\\n```\\n", "g"],
+    regExPattern: ["^(```.*?```$)", "gms"],
     replaceTag: "<MTR-code-MTR>"
   },
   ul: {

@@ -8,7 +8,7 @@ const REGEXPATTERNS = {
     htmlTag: s => "blockquote"
   },
   code: {
-    regExPattern: ["^```\\n(.|\\n)+\\n```\n", "g"],
+    regExPattern: ["^(```.*?```$)", "gms"],
     htmlTag: s => "code"
   },
   ul: {
