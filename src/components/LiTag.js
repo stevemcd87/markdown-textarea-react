@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import UlTag from "./UlTag";
+import InlineTag from "./InlineTag";
 export default function LiTag(props) {
   let { li } = props,
     [nestedPortion, setNestedPortion] = useState("");
@@ -10,7 +11,7 @@ export default function LiTag(props) {
   if (nestedPortion) return <UlTag ul={li.replace(/(^\s{2})+/gm, "")} />;
   return (
     <li className="mtr-li">
-      {li.replace(/^\-\s/, "").replace(/(^\s{2}\-\s.+)+/gm, "")}
+      <InlineTag s={li.replace(/^\-\s/, "").replace(/(^\s{2}\-\s.+)+/gm, "")}/>
     </li>
   );
 }

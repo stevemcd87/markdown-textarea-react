@@ -10,10 +10,6 @@ import INLINEHTMLTAGS from "./variables/INLINEHTMLTAGS.js";
 import INLINEREGEXPATTERNS from "./variables/INLINEREGEXPATTERNS.js";
 import "./App.css";
 
-const PatternsToSplit = Object.values(REGEXPATTERNS).reduce((t, v, i) => {
-  let prepend = i > 0 ? "|" : "";
-  return (t += prepend + v.regExPattern[0]);
-}, "");
 function App() {
   let [htmlElements, setHtmlElements] = useState([]);
   return (
@@ -96,4 +92,8 @@ const MULTILINEPATTERNS = {
     replaceTag: "<MTR-ul-MTR>"
   }
 };
+const PatternsToSplit = Object.values(REGEXPATTERNS).reduce((t, v, i) => {
+  let prepend = i > 0 ? "|" : "";
+  return (t += prepend + v.regExPattern[0]);
+}, "");
 export default App;
