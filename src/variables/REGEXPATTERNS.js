@@ -17,6 +17,13 @@ const REGEXPATTERNS = {
       "gm"
     ],
     htmlTag: s => "ul"
+  },
+  table: {
+    regExPattern: [
+      "(^\\|.+\\|\\n)+",
+      "gm"
+    ],
+    htmlTag: s => "table"
   }
 };
 

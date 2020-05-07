@@ -62,7 +62,7 @@ function App() {
     // updates htmlTag & elementText if matchedPattern was found
     if (matchedPattern) {
       htmlTag = matchedPattern.htmlTag(text);
-      if (htmlTag !== "code" && htmlTag !== "ul")
+      if (htmlTag !== "code" && htmlTag !== "ul" && htmlTag !== "table")
         elementText = text.replace(
           text.match(new RegExp(...matchedPattern.regExPattern))[0],
           ""
@@ -90,6 +90,13 @@ const MULTILINEPATTERNS = {
       "gm"
     ],
     replaceTag: "<MTR-ul-MTR>"
+  },
+  table: {
+    regExPattern: [
+      "(^\\|.+\\|\\n)+",
+      "gm"
+    ],
+    replaceTag: "<MTR-table-MTR>"
   }
 };
 const PatternsToSplit = Object.values(REGEXPATTERNS).reduce((t, v, i) => {

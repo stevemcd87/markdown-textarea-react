@@ -2,6 +2,7 @@ import React from "react";
 import InlineTag from "../components/InlineTag";
 import UlTag from "../components/UlTag";
 import CodeTag from "../components/CodeTag";
+import TableTag from "../components/TableTag";
 
 const HTMLTAGS = {
   p: s => {
@@ -43,13 +44,15 @@ const HTMLTAGS = {
       <InlineTag {...{ s }} />
     </h6>
   ),
-  ul: ul => <UlTag {...{ ul }} />,
-  code: code => <CodeTag {...{ code }} />,
   blockquote: s => (
     <blockquote className="mtr-blockquote">
       <InlineTag {...{ s }} />
     </blockquote>
-  )
+  ),
+  ul: ul => <UlTag {...{ ul }} />,
+  code: code => <CodeTag {...{ code }} />,
+
+  table: table => <TableTag {...{table}} />
 };
 
 export default HTMLTAGS;

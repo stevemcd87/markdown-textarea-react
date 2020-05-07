@@ -174,17 +174,27 @@ it("li should be able to display inline tags in ul", () => {
   expect(li[2].querySelector(".mtr-strong > .mtr-em").innerHTML).toBe("hey23");
 });
 
-it("li should be able to display multiple of the same inline tags", () => {
+it("should be able to display multiple of the same inline tags", () => {
   const { container } = render(<App />);
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: {
       value: "*hey* **hey2** ***hey23*** *hey* **hey2** ***hey23***"
     }
   });
-  // let li = [...container.querySelectorAll("em")];
-  // expect(li.length).toBe(3);
+
   expect(container.querySelectorAll("em").length).toBe(4);
-    expect(container.querySelectorAll("strong").length).toBe(4);
-  // expect(li[1].querySelector(".mtr-strong").innerHTML).toBe("hey2");
-  // expect(li[2].querySelector(".mtr-strong > .mtr-em").innerHTML).toBe("hey23");
+  expect(container.querySelectorAll("strong").length).toBe(4);
+});
+
+it("should display table with thead,th,tbody,td tags", () => {
+  const { container } = render(<App />);
+  fireEvent.change(container.querySelector(".mtr-textarea"), {
+    target: {
+      value:
+        "| Syntax | Description |\n| --- | ----------- |\n| Header | Title |\n| Paragraph | Text |\n"
+    }
+  });
+  console.log(container.querySelector("table").innerHTML);
+  expect(container.querySelectorAll("thead th").length).toBe(2);
+  expect(container.querySelectorAll("tbody td").length).toBe(4);
 });
