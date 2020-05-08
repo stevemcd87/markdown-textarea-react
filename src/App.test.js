@@ -194,7 +194,6 @@ it("should display table with thead,th,tbody,td tags", () => {
         "| Syntax | Description |\n| --- | ----------- |\n| Header | Title |\n| Paragraph | Text |\n"
     }
   });
-  console.log(container.querySelector("table").innerHTML);
   expect(container.querySelectorAll("thead th").length).toBe(2);
   expect(container.querySelectorAll("tbody td").length).toBe(4);
 });
@@ -210,4 +209,17 @@ it("should display inline code tag", () => {
   expect(container.querySelector("em").innerHTML).toBe("hey");
   expect(container.querySelectorAll("code")[0].innerHTML).toBe("```");
   expect(container.querySelectorAll("code")[1].innerHTML).toBe("var a = []");
+});
+
+it("should display markdown Preview if provided a source", () => {
+  const { container } = render(<App source="````` *hey* 1 `var a = []` " />);
+  expect(container.querySelectorAll("code").length).toBe(2);
+  expect(container.querySelector("em").innerHTML).toBe("hey");
+  expect(container.querySelectorAll("code")[0].innerHTML).toBe("```");
+  expect(container.querySelectorAll("code")[1].innerHTML).toBe("var a = []");
+});
+
+it("should hide textarea if displayTextarea prop is set to false", () => {
+  const { container } = render(<App displayTextarea={false}/>);
+  expect(container.querySelector(".mtr-textarea")).toBeNull();
 });

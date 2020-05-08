@@ -10,23 +10,30 @@ import INLINEHTMLTAGS from "./variables/INLINEHTMLTAGS.js";
 import INLINEREGEXPATTERNS from "./variables/INLINEREGEXPATTERNS.js";
 import "./App.css";
 
-function App() {
-  let [htmlElements, setHtmlElements] = useState([]);
+function App(props) {
+  //verticalAutoResize = true(default),false or maxHeightInteger
+  let { verticalAutoResize, source, displayTextarea } = props,
+    [sourceValue, setSourceValue] = useState(source),
+    [htmlElements, setHtmlElements] = useState([]);
+  // Updates Preview when source value has changed
+  useEffect(() => {
+    let savedPatterns = savePatterns(sourceValue),
+      lineBreaks = createLineBreaks(savedPatterns),
+      // Wrap each line break with a designated element
+      markdownRows = lineBreaks.map(designateElement);
+    setHtmlElements(markdownRows);
+  }, [sourceValue]);
   return (
     <div className="App">
-      <textarea className="mtr-textarea" onChange={updatePreview} />
+      {displayTextarea && (
+        <textarea
+          className="mtr-textarea"
+          onChange={e => setSourceValue(e.target.value)}
+        />
+      )}
       <Preview {...{ htmlElements }} />
     </div>
   );
-
-  function updatePreview(e) {
-    let textValue = e.target.value,
-      savedPatterns = savePatterns(textValue),
-      lineBreaks = createLineBreaks(savedPatterns);
-    // Wrap each line break with a designated element
-    const markdownRows = lineBreaks.map(designateElement);
-    setHtmlElements(markdownRows);
-  }
 
   function savePatterns(textToSearch) {
     return Object.values(MULTILINEPATTERNS).reduce(
@@ -92,12 +99,14 @@ const MULTILINEPATTERNS = {
     replaceTag: "<MTR-ul-MTR>"
   },
   table: {
-    regExPattern: [
-      "(^\\|.+\\|\\n)+",
-      "gm"
-    ],
+    regExPattern: ["(^\\|.+\\|\\n)+", "gm"],
     replaceTag: "<MTR-table-MTR>"
   }
+};
+App.defaultProps = {
+  verticalAutoResize: true,
+  source: "",
+  displayTextarea: true
 };
 const PatternsToSplit = Object.values(REGEXPATTERNS).reduce((t, v, i) => {
   let prepend = i > 0 ? "|" : "";
