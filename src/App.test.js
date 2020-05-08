@@ -198,3 +198,16 @@ it("should display table with thead,th,tbody,td tags", () => {
   expect(container.querySelectorAll("thead th").length).toBe(2);
   expect(container.querySelectorAll("tbody td").length).toBe(4);
 });
+
+it("should display inline code tag", () => {
+  const { container } = render(<App />);
+  fireEvent.change(container.querySelector(".mtr-textarea"), {
+    target: {
+      value: "````` *hey* 1 `var a = []` "
+    }
+  });
+  expect(container.querySelectorAll("code").length).toBe(2);
+  expect(container.querySelector("em").innerHTML).toBe("hey");
+  expect(container.querySelectorAll("code")[0].innerHTML).toBe("```");
+  expect(container.querySelectorAll("code")[1].innerHTML).toBe("var a = []");
+});

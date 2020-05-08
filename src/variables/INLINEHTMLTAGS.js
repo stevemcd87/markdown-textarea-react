@@ -21,6 +21,7 @@ const INLINEHTMLTAGS = {
       {updateATag("a", "text", s)}
     </a>
   ),
+  code: s => <code className="mtr-code">{updateTagString("code", s)}</code>,
   sup: s => <sup className="mtr-sup">{updateTagString("sup", s)}</sup>,
   sub: s => <sub className="mtr-sub">{updateTagString("sub", s)}</sub>
 };

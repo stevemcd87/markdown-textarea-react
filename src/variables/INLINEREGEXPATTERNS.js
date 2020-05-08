@@ -34,6 +34,12 @@ const INLINEREGEXPATTERNS = {
     testPattern: ["<sub>.+<\\/sub>"],
     replacePattern: ["<sub>|<\\/sub>", "g"],
     htmlTag: s => "sub"
+  },
+  code: {
+    regExPattern: "(`.+?`)(?=\\s)",
+    testPattern: ["`.+?`"],
+    replacePattern: ["^`|`$", "g"],
+    htmlTag: s => "code"
   }
 };
 
