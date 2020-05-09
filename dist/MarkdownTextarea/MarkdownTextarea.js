@@ -33,6 +33,7 @@ function MarkdownTextarea(props) {
   }, displayTextarea && /*#__PURE__*/React.createElement("textarea", {
     ref: mtrTextArea,
     className: "mtr-textarea",
+    defaultValue: sourceValue,
     onChange: e => setSourceValue(e.target.value)
   }), /*#__PURE__*/React.createElement(Preview, {
     htmlElements

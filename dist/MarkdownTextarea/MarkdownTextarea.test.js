@@ -228,3 +228,11 @@ it("should hide textarea if displayTextarea prop is set to false", () => {
   }));
   expect(container.querySelector(".mtr-textarea")).toBeNull();
 });
+it("should fill textarea with source value if source is defined", () => {
+  const {
+    container
+  } = render( /*#__PURE__*/React.createElement(MarkdownTextarea, {
+    source: "hey"
+  }));
+  expect(container.querySelector(".mtr-textarea").innerHTML).toBe("hey");
+});
