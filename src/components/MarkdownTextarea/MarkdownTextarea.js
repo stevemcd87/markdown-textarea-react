@@ -30,6 +30,7 @@ function MarkdownTextarea(props) {
         <textarea
           ref={mtrTextArea}
           className="mtr-textarea"
+          defaultValue={sourceValue}
           onChange={e => setSourceValue(e.target.value)}
         />
       )}
