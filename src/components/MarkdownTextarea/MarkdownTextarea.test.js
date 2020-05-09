@@ -1,9 +1,9 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import App from "./App";
+import MarkdownTextarea from "./MarkdownTextarea";
 
 it("should display h1 - h6 tags", () => {
-  const { container } = render(<App />);
+  const { container } = render(<MarkdownTextarea />);
   let val = {
     h1WithEm: "# *hey1*\n",
     h2WithStrong: "## **hey2**\n",
@@ -32,7 +32,7 @@ it("should display h1 - h6 tags", () => {
 });
 
 it("should display a blockquote tag", () => {
-  const { container } = render(<App />);
+  const { container } = render(<MarkdownTextarea />);
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: {
       value: "> hey"
@@ -42,7 +42,7 @@ it("should display a blockquote tag", () => {
 });
 
 it("should display li tags", () => {
-  const { container } = render(<App />);
+  const { container } = render(<MarkdownTextarea />);
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: {
       value: "- hey1\n- hey2\n  - hey21\n- hey3\n"
@@ -59,7 +59,7 @@ it("should display li tags", () => {
 });
 
 it("should display a code tag", () => {
-  const { container } = render(<App />);
+  const { container } = render(<MarkdownTextarea />);
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: { value: "```\nvar a = [];\nvar b = 2;\n```\n" }
   });
@@ -70,7 +70,7 @@ it("should display a code tag", () => {
 });
 
 it("should display a strong and/or em tag", () => {
-  const { container } = render(<App />);
+  const { container } = render(<MarkdownTextarea />);
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: {
       value: " `hey * hey-em* hey **hey-strong** hey ***hey-st-em*** `"
@@ -82,7 +82,7 @@ it("should display a strong and/or em tag", () => {
 });
 
 it("should display a link", () => {
-  const { container } = render(<App />);
+  const { container } = render(<MarkdownTextarea />);
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: {
       value: "[hey](https://www.google.com)"
@@ -92,7 +92,7 @@ it("should display a link", () => {
 });
 
 it("should display a sup tag", () => {
-  const { container } = render(<App />);
+  const { container } = render(<MarkdownTextarea />);
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: {
       value: "5<sup>5</sup>"
@@ -102,7 +102,7 @@ it("should display a sup tag", () => {
 });
 
 it("should display a sub tag", () => {
-  const { container } = render(<App />);
+  const { container } = render(<MarkdownTextarea />);
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: {
       value: "5<sub>6</sub>"
@@ -112,7 +112,7 @@ it("should display a sub tag", () => {
 });
 
 it("should display all inline tags", () => {
-  const { container } = render(<App />);
+  const { container } = render(<MarkdownTextarea />);
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: {
       value:
@@ -131,7 +131,7 @@ it("should display all inline tags", () => {
 });
 
 it("should display h1, ul, and code tags", () => {
-  const { container } = render(<App />);
+  const { container } = render(<MarkdownTextarea />);
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: {
       value: "```\nvar a = [];\nvar b = 2;\n```\n# hey 1\n- list1\n"
@@ -145,7 +145,7 @@ it("should display h1, ul, and code tags", () => {
 });
 
 it("should be able to do multiple code tags", () => {
-  const { container } = render(<App />);
+  const { container } = render(<MarkdownTextarea />);
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: {
       value:
@@ -161,7 +161,7 @@ it("should be able to do multiple code tags", () => {
 });
 
 it("li should be able to display inline tags in ul", () => {
-  const { container } = render(<App />);
+  const { container } = render(<MarkdownTextarea />);
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: {
       value: "- *hey*\n- **hey2**\n- ***hey23***\n"
@@ -175,7 +175,7 @@ it("li should be able to display inline tags in ul", () => {
 });
 
 it("should be able to display multiple of the same inline tags", () => {
-  const { container } = render(<App />);
+  const { container } = render(<MarkdownTextarea />);
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: {
       value: "*hey* **hey2** ***hey23*** *hey* **hey2** ***hey23***"
@@ -187,7 +187,7 @@ it("should be able to display multiple of the same inline tags", () => {
 });
 
 it("should display table with thead,th,tbody,td tags", () => {
-  const { container } = render(<App />);
+  const { container } = render(<MarkdownTextarea />);
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: {
       value:
@@ -199,7 +199,7 @@ it("should display table with thead,th,tbody,td tags", () => {
 });
 
 it("should display inline code tag", () => {
-  const { container } = render(<App />);
+  const { container } = render(<MarkdownTextarea />);
   fireEvent.change(container.querySelector(".mtr-textarea"), {
     target: {
       value: "````` *hey* 1 `var a = []` "
@@ -212,7 +212,7 @@ it("should display inline code tag", () => {
 });
 
 it("should display markdown Preview if provided a source", () => {
-  const { container } = render(<App source="````` *hey* 1 `var a = []` " />);
+  const { container } = render(<MarkdownTextarea source="````` *hey* 1 `var a = []` " />);
   expect(container.querySelectorAll("code").length).toBe(2);
   expect(container.querySelector("em").innerHTML).toBe("hey");
   expect(container.querySelectorAll("code")[0].innerHTML).toBe("```");
@@ -220,6 +220,6 @@ it("should display markdown Preview if provided a source", () => {
 });
 
 it("should hide textarea if displayTextarea prop is set to false", () => {
-  const { container } = render(<App displayTextarea={false}/>);
+  const { container } = render(<MarkdownTextarea displayTextarea={false}/>);
   expect(container.querySelector(".mtr-textarea")).toBeNull();
 });

@@ -1,6 +1,6 @@
 import React from "react";
-import INLINEHTMLTAGS from "../variables/INLINEHTMLTAGS.js"
-import INLINEREGEXPATTERNS from "../variables/INLINEREGEXPATTERNS.js"
+import INLINEHTMLTAGS from "./variables/INLINEHTMLTAGS.js"
+import INLINEREGEXPATTERNS from "./variables/INLINEREGEXPATTERNS.js"
 
 export default function DesignateInlineTag(props) {
   let { inlineTag } = props,

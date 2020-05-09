@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import DesignateInlineTag from "./DesignateInlineTag";
-import INLINEREGEXPATTERNS from "../variables/INLINEREGEXPATTERNS.js"
+import INLINEREGEXPATTERNS from "./variables/INLINEREGEXPATTERNS.js"
 
 export default function InlineTag(props) {
   let { s } = props,

@@ -1,5 +1,5 @@
 import React from "react";
-import HTMLTAGS from "../../variables/HTMLTAGS.js"
+import HTMLTAGS from "../variables/HTMLTAGS.js"
 export default function Preview(props) {
   let { htmlElements } = props;
   return (

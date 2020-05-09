@@ -1,8 +1,8 @@
 import React from "react";
-import InlineTag from "../components/InlineTag";
-import UlTag from "../components/UlTag";
-import CodeTag from "../components/CodeTag";
-import TableTag from "../components/TableTag";
+import InlineTag from "../InlineTag";
+import UlTag from "../UlTag";
+import CodeTag from "../CodeTag";
+import TableTag from "../TableTag";
 
 const HTMLTAGS = {
   p: s => {
