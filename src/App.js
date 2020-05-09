@@ -4,7 +4,6 @@ import Preview from "./components/Preview/Preview";
 // ==== VARIABLES ===
 import HTMLTAGS from "./variables/HTMLTAGS.js";
 import REGEXPATTERNS from "./variables/REGEXPATTERNS.js";
-import "./App.css";
 
 function App(props) {
   let { verticalAutoResize, source, displayTextarea, callback } = props,
@@ -14,7 +13,7 @@ function App(props) {
 
   useEffect(() => {
     if (callback) callback(sourceValue);
-    if (verticalAutoResize) {
+    if (displayTextarea && verticalAutoResize) {
       let textareaScrollHeight = mtrTextArea.current.scrollHeight;
       if (textareaScrollHeight > mtrTextArea.current.offsetHeight)
         mtrTextArea.current.style.height = `${textareaScrollHeight}px`;
