@@ -16,7 +16,7 @@ export default function TableTag(props) {
       tc.tableBody = tableRows.slice();
     }
     setTableContent(tc);
-  }, []);
+  }, [table]);
   return (
     <table className="mtr-table">
       {tableContent.tableHead && (

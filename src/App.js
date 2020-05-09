@@ -1,32 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 // ===== Components ======
-import UlTag from "./components/UlTag";
-import CodeTag from "./components/CodeTag";
 import Preview from "./components/Preview/Preview";
 // ==== VARIABLES ===
 import HTMLTAGS from "./variables/HTMLTAGS.js";
 import REGEXPATTERNS from "./variables/REGEXPATTERNS.js";
-import INLINEHTMLTAGS from "./variables/INLINEHTMLTAGS.js";
-import INLINEREGEXPATTERNS from "./variables/INLINEREGEXPATTERNS.js";
 import "./App.css";
 
 function App(props) {
-  //verticalAutoResize = true(default),false or maxHeightInteger
-  let { verticalAutoResize, source, displayTextarea } = props,
+  let { verticalAutoResize, source, displayTextarea, callback } = props,
     [sourceValue, setSourceValue] = useState(source),
-    [htmlElements, setHtmlElements] = useState([]);
-  // Updates Preview when source value has changed
+    [htmlElements, setHtmlElements] = useState([]),
+    mtrTextArea = useRef();
+
   useEffect(() => {
+    if (callback) callback(sourceValue);
+    if (verticalAutoResize) {
+      let textareaScrollHeight = mtrTextArea.current.scrollHeight;
+      if (textareaScrollHeight > mtrTextArea.current.offsetHeight)
+        mtrTextArea.current.style.height = `${textareaScrollHeight}px`;
+    }
     let savedPatterns = savePatterns(sourceValue),
       lineBreaks = createLineBreaks(savedPatterns),
-      // Wrap each line break with a designated element
       markdownRows = lineBreaks.map(designateElement);
     setHtmlElements(markdownRows);
   }, [sourceValue]);
+
   return (
     <div className="App">
       {displayTextarea && (
         <textarea
+          ref={mtrTextArea}
           className="mtr-textarea"
           onChange={e => setSourceValue(e.target.value)}
         />
