@@ -12,7 +12,7 @@ export default function DesignateInlineTag(props) {
     return INLINEHTMLTAGS[selectedPattern.htmlTag(inlineTag)](inlineTag);
   }
 
-  return /*#__PURE__*/React.createElement(React.Fragment, null, inlineTag ? inlineTag : "");
+  return /*#__PURE__*/React.createElement(React.Fragment, null, inlineTag || "");
 
   function createTestPatterns(patterns) {
     return Object.values(patterns);

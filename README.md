@@ -4,12 +4,14 @@ Displays a textarea form input that accepts markdown syntax and converts value t
 ## How to Use
 **Markdown syntax that can be used are:**
 - Inline Elements (Low Level):
+  - code
   - strong
   - em
+  - img
   - a
   - sup
   - sub
-  - code
+
 - Single Line Elements (High Level):
   - paragraph tags(p)
   - heading tags(h1-h6)
@@ -21,22 +23,31 @@ Displays a textarea form input that accepts markdown syntax and converts value t
 
 ### Inline Elements (Low Level)
 - Inline Elements ***can*** be nested within high level elements ***but can't*** be nested within another inline element. Exception:`<strong><em>text</em></strong>`
-- Examples: 
+- Examples:
   - `###### *text*` = `<h6><em>text</em></h6>` **(works)**
   - `**5<sup>5</sup>**` =  'strong' tag with the value `5<sup>5</sup>`**(doesn't work)**
   - `***text***` = `<strong><em>text</em></strong>` **(works)**
-#### em
-  - Use: `*text*`
-  - HTML output: `<em>text</em>`
-  - Preview: *text*
+#### code-inline
+  - Use: `` `text` ``(backticks)
+  - HTML output: `<code>text</code>`
+  - Preview: `text`
 #### strong
   - Use: `**text**`
   - HTML output: `<strong>text</strong>`
   - Preview: **text**
+#### em
+  - Use: `*text*`
+  - HTML output: `<em>text</em>`
+  - Preview: *text*
 #### strong & em
   - Use: `***text***`
   - HTML output: `<strong><em>text</em></strong>`
   - Preview: ***text***
+#### img
+  - Use: `![trees](https://i.pinimg.com/originals/40/20/70/402070277d6004a9c5b62e18b0fb4578.jpg)`
+  - **Can Also Add**: `[200,250]` after closing parenthesis to specify width & height
+  - HTML output: `<img src="https://i.pinimg.com/originals/40/20/70/402070277d6004a9c5b62e18b0fb4578.jpg" alt="trees" />`
+  - Preview: ![trees](https://i.pinimg.com/originals/40/20/70/402070277d6004a9c5b62e18b0fb4578.jpg)
 #### a
   - Use: `[google](https://google.com)`
   - HTML output: `<a href="https://google.com">google</a>`
@@ -49,22 +60,18 @@ Displays a textarea form input that accepts markdown syntax and converts value t
   - Use: `5<sub>5</sub>`
   - HTML output: `5<sub>5</sub>`
   - Preview: 5<sub>5</sub>
-#### code-inline
-  - Use: `` `text` ``(backticks)
-  - HTML output: `<code>text</code>`
-  - Preview: `text`
 ### Single Line Elements (High Level)
 - High Level elements ***can't*** contain any other high level element within itself.
 - High Level elements ***can*** have multiple inline elements nested within.
-- Examples: 
+- Examples:
   - `> ### text` = `<blockquote>###### text</blockquote>` **(doesn't work)**
   - `### *hey* **you**` =  `<h3><em>hey</em> <strong>you</strong></h3>`**(works)**
 #### p
-**'p' tag is default** 
-Each line break gets wrapped in a 'p' tag if no other high level element has been called 
+**'p' tag is default**
+Each line break gets wrapped in a 'p' tag if no other high level element has been called
   - Use: `text`
   - HTML output: `<p>text</p>`
-#### headings 
+#### headings
 **h1-h6**
   - Use: `# heading` - Can add up to 6 `#`'s
   - HTML output: `<h1>heading</h1>`
@@ -74,14 +81,14 @@ Each line break gets wrapped in a 'p' tag if no other high level element has bee
   ### MultiLine Groups (High Level)
 
 #### table
-  - Use: 
+  - Use:
 ```markdown
 | column1 | column2 |
 | --- |
 | td1 | td2 |
 | td3 | td4 |
 ```
-  - HTML output: 
+  - HTML output:
 ```html
 <table>
   <thead>
@@ -102,10 +109,10 @@ Each line break gets wrapped in a 'p' tag if no other high level element has bee
   <tbody/>
 </table>
 ```
-  
-#### code-multiline 
+
+#### code-multiline
   - Use: 3 backticks, `` ``` ``, on their own line wrapping code block
-  
+
 `` ``` ``
 ```
   var a = [];
@@ -113,7 +120,7 @@ Each line break gets wrapped in a 'p' tag if no other high level element has bee
 ```
 `` ``` ``
 
-  - HTML output: 
+  - HTML output:
 ```html
 <div>
   <code>
@@ -123,7 +130,7 @@ Each line break gets wrapped in a 'p' tag if no other high level element has bee
 </div>
 ```
 #### ul
-  - Use: 
+  - Use:
   ```markdown
   - li1
   - li2
@@ -131,7 +138,7 @@ Each line break gets wrapped in a 'p' tag if no other high level element has bee
     - nestedLi2
   - li3
   ```
-  - HTML output: 
+  - HTML output:
 ```html
 <ul>
   <li>li1</li>
@@ -143,7 +150,3 @@ Each line break gets wrapped in a 'p' tag if no other high level element has bee
   <li>li3</li>
 </ul>
 ```
-
-
-  
-

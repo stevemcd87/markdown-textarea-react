@@ -1,5 +1,11 @@
 const INLINEREGEXPATTERNS = {
   // To find Inline HTML elements (span,strong,em,etc...)
+  code: {
+    regExPattern: "(`.+?`)(?=\\s)",
+    testPattern: ["`.+?`"],
+    replacePattern: ["^`|`$", "g"],
+    htmlTag: s => "code"
+  },
   strongEm: {
     regExPattern: "(\\*{1,3}.+?\\*{1,3})",
     testPattern: ["\\*{3}.+?\\*{3}"],
@@ -16,11 +22,19 @@ const INLINEREGEXPATTERNS = {
     replacePattern: ["\\*", "g"],
     htmlTag: s => "em"
   },
+  img: {
+    regExPattern: "(!\\[.+?\\]\\(.+?\\)\\[?\\d*\\,?\\d*\\]?)",
+    testPattern: ["!\\[.+?\\]\\(.+?\\)(\\[\\d+(\\,\\d+)?\\])?"],
+    replacePatternHREF: ["!\\[.+\\]\\(|\\)|\\[\\d+(\\,\\d+)?\\]", "g"],
+    replacePatternText: ["!\\[|\\](.+)|\\[\\d+|\\,\\d+|\\]", "g"],
+    replacePatternStyle: ["!\\[.+?\]\\(.+?\\)", "g"],
+    htmlTag: s => "img"
+  },
   a: {
-    regExPattern: "(\\[.+\\]\\(.+\\))",
-    testPattern: ["\\[.+\\]\\(.+\\)"],
+    regExPattern: "(\\[.+?\\]\\(.+?\\))",
+    testPattern: ["\\[.+?\\]\\(.+?\\)"],
     replacePatternHREF: ["\\[.+\\]\\(|\\)", "g"],
-    replacePatternText: ["\\[|\\](.+)", "g"],
+    replacePatternText: ["\\[|\\]\\(.+\\)", "g"],
     htmlTag: s => "a"
   },
   sup: {
@@ -34,12 +48,6 @@ const INLINEREGEXPATTERNS = {
     testPattern: ["<sub>.+<\\/sub>"],
     replacePattern: ["<sub>|<\\/sub>", "g"],
     htmlTag: s => "sub"
-  },
-  code: {
-    regExPattern: "(`.+?`)(?=\\s)",
-    testPattern: ["`.+?`"],
-    replacePattern: ["^`|`$", "g"],
-    htmlTag: s => "code"
   }
 };
 export default INLINEREGEXPATTERNS;

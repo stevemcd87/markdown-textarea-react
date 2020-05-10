@@ -12,6 +12,12 @@ const INLINEHTMLTAGS = {
   em: s => /*#__PURE__*/React.createElement("em", {
     className: "mtr-em"
   }, updateTagString("em", s)),
+  img: s => /*#__PURE__*/React.createElement("img", {
+    className: "mtr-img",
+    style: updateATag("img", "style", s),
+    src: updateATag("img", "href", s),
+    alt: updateATag("img", "text", s)
+  }),
   a: s => /*#__PURE__*/React.createElement("a", {
     className: "mtr-a",
     href: updateATag("a", "href", s),
@@ -30,7 +36,21 @@ const INLINEHTMLTAGS = {
 };
 
 function updateATag(key, attr, string) {
-  if (attr === "href") return string.replace(new RegExp(...INLINEREGEXPATTERNS[key].replacePatternHREF), "");else return string.replace(new RegExp(...INLINEREGEXPATTERNS[key].replacePatternText), "");
+  if (attr === "href") return string.replace(new RegExp(...INLINEREGEXPATTERNS[key].replacePatternHREF), "");else if (attr === "style") {
+    let styles = {
+      width: "300px",
+      height: "300px"
+    },
+        size = string.replace(new RegExp(...INLINEREGEXPATTERNS[key].replacePatternStyle), "");
+
+    if (size) {
+      let dimensions = size.replace(/\[|\]/g, '').split(',');
+      styles.width = `${dimensions[0]}px`;
+      styles.height = `${dimensions[1] || dimensions[0]}px`;
+    }
+
+    return styles;
+  } else return string.replace(new RegExp(...INLINEREGEXPATTERNS[key].replacePatternText), "");
 }
 
 function updateTagString(key, string) {

@@ -20,13 +20,11 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "react-scripts": "3.4.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-scripts": "3.4.1"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "rm -rf dist && NODE_ENV=production babel src/components --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
+    "build": "rm -rf dist && NODE_ENV=production babel src/components --out-dir dist --copy-files --ignore '**/*.test.js' --no-copy-ignored ",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
