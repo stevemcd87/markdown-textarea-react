@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 // ===== Components ======
 import Preview from "../Preview/Preview";
 // ==== VARIABLES ===
-import HTMLTAGS from "../variables/HTMLTAGS.js";
-import REGEXPATTERNS from "../variables/REGEXPATTERNS.js";
+import HTMLTAGS from "../variables/HTMLTAGS";
+import REGEXPATTERNS from "../variables/REGEXPATTERNS";
+import MULTILINEPATTERNS from "../variables/MULTILINEPATTERNS";
 
 function MarkdownTextarea(props) {
   let { verticalAutoResize, source, displayTextarea, callback } = props,
@@ -95,23 +96,6 @@ function MarkdownTextarea(props) {
   }
 } // end of MarkdownTextarea component
 
-const MULTILINEPATTERNS = {
-  code: {
-    regExPattern: ["^(```.*?```$)", "gms"],
-    replaceTag: "<MTR-code-MTR>"
-  },
-  ul: {
-    regExPattern: [
-      "(((^\\-\\s.+\\n)+((?<=^\\-\\s.+\\n)(^\\s{2}\\-\\s.+\\s)*)?)+)",
-      "gm"
-    ],
-    replaceTag: "<MTR-ul-MTR>"
-  },
-  table: {
-    regExPattern: ["(^\\|.+\\|\\n)+", "gm"],
-    replaceTag: "<MTR-table-MTR>"
-  }
-};
 MarkdownTextarea.defaultProps = {
   verticalAutoResize: true,
   source: "",
