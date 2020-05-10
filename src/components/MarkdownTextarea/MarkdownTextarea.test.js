@@ -227,8 +227,12 @@ it("should hide textarea if displayTextarea prop is set to false", () => {
 });
 
 it("should fill textarea with source value if source is defined", () => {
-  const { container } = render(
-    <MarkdownTextarea source="hey" />
-  );
+  const { container } = render(<MarkdownTextarea source="hey" />);
   expect(container.querySelector(".mtr-textarea").innerHTML).toBe("hey");
+});
+it("should display an image", () => {
+  const { container } = render(
+    <MarkdownTextarea source="![Philadelphia's Magic Gardens. This place was so cool!](https://www.resilience.org/wp-content/uploads/2017/11/amazing-things-about-trees-plain-header-740x444.png)[45]" />
+  );
+  expect(container.querySelector("img")).toBeTruthy();
 });

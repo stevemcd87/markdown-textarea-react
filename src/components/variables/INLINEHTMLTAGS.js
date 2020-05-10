@@ -11,6 +11,15 @@ const INLINEHTMLTAGS = {
     <strong className="mtr-strong">{updateTagString("strong", s)}</strong>
   ),
   em: s => <em className="mtr-em">{updateTagString("em", s)}</em>,
+  img: s => (
+    <img
+      className="mtr-img"
+      style={updateATag("img", "style", s)}
+      src={updateATag("img", "href", s)}
+      alt={updateATag("img", "text", s)}
+    />
+
+  ),
   a: s => (
     <a
       className="mtr-a"
@@ -32,7 +41,19 @@ function updateATag(key, attr, string) {
       new RegExp(...INLINEREGEXPATTERNS[key].replacePatternHREF),
       ""
     );
-  else
+  else if (attr === "style") {
+    let styles = {width:"300px",height:"300px"},
+      size = string.replace(
+        new RegExp(...INLINEREGEXPATTERNS[key].replacePatternStyle),
+        ""
+      );
+    if (size) {
+      let dimensions = size.replace(/\[|\]/g,'').split(',');
+      styles.width = `${dimensions[0]}px`;
+      styles.height = `${dimensions[1] || dimensions[0]}px`;
+    }
+    return styles
+  } else
     return string.replace(
       new RegExp(...INLINEREGEXPATTERNS[key].replacePatternText),
       ""

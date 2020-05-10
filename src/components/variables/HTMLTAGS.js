@@ -51,7 +51,6 @@ const HTMLTAGS = {
   ),
   ul: ul => <UlTag {...{ ul }} />,
   code: code => <CodeTag {...{ code }} />,
-
   table: table => <TableTag {...{table}} />
 };
 

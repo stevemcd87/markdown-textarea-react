@@ -1,4 +1,8 @@
 const REGEXPATTERNS = {
+  code: {
+    regExPattern: ["^(```.+?```$)", "gms"],
+    htmlTag: s => "code"
+  },
   heading: {
     regExPattern: ["^#{1,6}\\s"],
     htmlTag: s => `h${s.match(/^#{1,6}\s/)[0].length - 1}`
@@ -6,10 +10,6 @@ const REGEXPATTERNS = {
   blockquote: {
     regExPattern: ["^>\\s"],
     htmlTag: s => "blockquote"
-  },
-  code: {
-    regExPattern: ["^(```.*?```$)", "gms"],
-    htmlTag: s => "code"
   },
   ul: {
     regExPattern: [

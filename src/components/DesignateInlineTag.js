@@ -1,6 +1,6 @@
 import React from "react";
-import INLINEHTMLTAGS from "./variables/INLINEHTMLTAGS.js"
-import INLINEREGEXPATTERNS from "./variables/INLINEREGEXPATTERNS.js"
+import INLINEHTMLTAGS from "./variables/INLINEHTMLTAGS.js";
+import INLINEREGEXPATTERNS from "./variables/INLINEREGEXPATTERNS.js";
 
 export default function DesignateInlineTag(props) {
   let { inlineTag } = props,
@@ -9,7 +9,7 @@ export default function DesignateInlineTag(props) {
   if (selectedPattern) {
     return INLINEHTMLTAGS[selectedPattern.htmlTag(inlineTag)](inlineTag);
   }
-  return <>{inlineTag ? inlineTag : ""}</>;
+  return <>{inlineTag || ""}</>;
   function createTestPatterns(patterns) {
     return Object.values(patterns);
   }

@@ -12,7 +12,7 @@ function MarkdownTextarea(props) {
     displayTextarea,
     callback
   } = props,
-      [sourceValue, setSourceValue] = useState(source),
+      [sourceValue, setSourceValue] = useState(source || ""),
       [htmlElements, setHtmlElements] = useState([]),
       mtrTextArea = useRef();
   useEffect(() => {
