@@ -4,8 +4,10 @@ a **Node Package** that displays a textarea form input that accepts markdown syn
 `npm i markdown-textarea-react`
 ### Basic use
 ```js
+import React, { useState } from "react"; 
 import { MarkdownTextarea } from "markdown-textarea-react";
 function App() 
+  let [ textValue, setTextValue ] = useState=("");
   return (
     <div className="App">
       <MarkdownTextarea 
