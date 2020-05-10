@@ -1,6 +1,26 @@
 # markdown-textarea-react
-Displays a textarea form input that accepts markdown syntax and converts value to html
+a **Node Package** that displays a textarea form input that accepts markdown syntax and converts value to html
+## Install
+`npm i markdown-textarea-react`
+### Basic use
+```js
+import { MarkdownTextarea } from "markdown-textarea-react";
+function App() 
+  return (
+    <div className="App">
+      <MarkdownTextarea 
+        source={DEFAULT_VALUE} 
+        callback={setTextValue} 
+        displayTextarea={true} // set to 'false' to hide textarea input
+        verticalAutoResize={true} // Enlarges textarea when content overflows
+        />
+    </div>
+  );
+}
+const DEFAULT_VALUE = "# *Header tags*\n## *h*<sup>2</sup>*O*\n### h<sub>3</sub>\n### Table\n|header| header2|header3| header4|\n| --- |\n|row1|column2|etc| more|\n|column1|row2|row| more|\n> **Blockquote** with ***inline code*** - `var a = [];` \n### Code Block\n```\nvar a = [];\nvar b = {};\n```\n#### Unordered List\n- li\n- li\n  - nested li w/ [link](https://www.google.com)\n  - *nested* li w/ **picture** ![trees](https://www.arborday.org/images/hero/medium/hero-aerial-forest-evergreen-trees.jpg)[50]\n- li\n#### Can specify width & height for Images\n![trees](https://www.arborday.org/images/hero/medium/hero-aerial-forest-evergreen-trees.jpg)[100,150] ![trees](https://www.arborday.org/images/hero/medium/hero-aerial-forest-evergreen-trees.jpg)[200] ![trees](https://www.arborday.org/images/hero/medium/hero-aerial-forest-evergreen-trees.jpg)"
 
+export default App;
+```
 ## How to Use
 **Markdown syntax that can be used are:**
 - Inline Elements (Low Level):
