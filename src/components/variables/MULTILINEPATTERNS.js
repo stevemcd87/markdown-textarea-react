@@ -5,7 +5,7 @@ const MULTILINEPATTERNS = {
   },
   ul: {
     regExPattern: [
-      "(((^\\-\\s.+\\n)+((?<=^\\-\\s.+\\n)(^\\s{2}\\-\\s.+\\s)*)?)+)",
+      "(((^\\-\\s.+\\n)+((?:^\\-\\s.+\\n)?(^\\s{2}\\-\\s.+\\s)*)?)+)",
       "gm"
     ],
     replaceTag: "<MTR-ul-MTR>"
