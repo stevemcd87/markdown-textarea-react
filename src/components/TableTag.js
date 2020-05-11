@@ -19,9 +19,8 @@ export default function TableTag(props) {
   }, [table]);
   return (
     <table className="mtr-table">
-      {tableContent.tableHead && (
-        <THeadTag tableHead={tableContent.tableHead} />
-      )}
+      <THeadTag tableHead={tableContent.tableHead} />
+
       <TBodyTag tableBody={tableContent.tableBody} />
     </table>
   );
@@ -73,5 +72,5 @@ function TBodyTag(props) {
 }
 
 function trPrep(rowString) {
-  if (rowString) return rowString.split("|").filter(v => v.trim());
+  return rowString ? rowString.split("|").filter(v => v.trim()) : [];
 }
