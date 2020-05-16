@@ -6,6 +6,7 @@ import TableTag from "../TableTag";
 
 const HTMLTAGS = {
   p: s => {
+    console.log(s);
     if (s) {
       return (
         <p className="mtr-p">

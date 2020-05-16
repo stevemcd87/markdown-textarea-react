@@ -2,10 +2,6 @@ import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 import MarkdownTextarea from "../components/MarkdownTextarea/MarkdownTextarea";
 
-it('should create h1 tags',()=>{
-
-})
-
 it("should display h1 - h6 tags", () => {
   const { container } = render(<MarkdownTextarea />);
   let val = {

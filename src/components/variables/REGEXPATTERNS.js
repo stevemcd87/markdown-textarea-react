@@ -3,10 +3,6 @@ const REGEXPATTERNS = {
     regExPattern: ["^(```.+?```$)", "gms"],
     htmlTag: "code"
   },
-  // heading: {
-  //   regExPattern: ["^#{1,6}\\s*"],
-  //   htmlTag: `h${s.match(/^#{1,6}\s/)[0].length - 1}`
-  // },
   h6:  {
     regExPattern: ["^#{6}"],
     htmlTag: "h6"
