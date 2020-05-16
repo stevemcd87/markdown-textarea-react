@@ -12,7 +12,7 @@ const REGEXPATTERNS = {
     htmlTag: s => "blockquote"
   },
   ul: {
-    regExPattern: ["(^\\-\\s.+\\n+((?<=^\\-\\s.+\\n)(^\\s{2}\\-\\s.+\\s)+)?)+", "gm"],
+    regExPattern: ["(^\\-\\s.+\\n+((?:^\\-\\s.+\\n)?(^\\s{2}\\-\\s.+\\s)+)?)+", "gm"],
     htmlTag: s => "ul"
   },
   table: {

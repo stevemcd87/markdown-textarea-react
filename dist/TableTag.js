@@ -26,7 +26,7 @@ export default function TableTag(props) {
   }, [table]);
   return /*#__PURE__*/React.createElement("table", {
     className: "mtr-table"
-  }, tableContent.tableHead && /*#__PURE__*/React.createElement(THeadTag, {
+  }, /*#__PURE__*/React.createElement(THeadTag, {
     tableHead: tableContent.tableHead
   }), /*#__PURE__*/React.createElement(TBodyTag, {
     tableBody: tableContent.tableBody
@@ -80,5 +80,5 @@ function TBodyTag(props) {
 }
 
 function trPrep(rowString) {
-  if (rowString) return rowString.split("|").filter(v => v.trim());
+  return rowString ? rowString.split("|").filter(v => v.trim()) : [];
 }

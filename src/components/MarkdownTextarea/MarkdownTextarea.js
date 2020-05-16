@@ -78,8 +78,9 @@ function MarkdownTextarea(props) {
       matchedPattern = searchForMatch(text);
     // updates htmlTag & elementText if matchedPattern was found
     if (matchedPattern) {
-      htmlTag = matchedPattern.htmlTag(text);
+      htmlTag = matchedPattern.htmlTag;
       if (htmlTag !== "code" && htmlTag !== "ul" && htmlTag !== "table")
+      // removes regex pattern from text
         elementText = text.replace(
           text.match(new RegExp(...matchedPattern.regExPattern))[0],
           ""
