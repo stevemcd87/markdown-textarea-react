@@ -23,9 +23,9 @@ const INLINEREGEXPATTERNS = {
     htmlTag: s => "em"
   },
   img: {
-    regExPattern: "(!\\[.+?\\]\\(.+?\\)\\[?\\d*\\,?\\d*\\]?)",
-    testPattern: ["!\\[.+?\\]\\(.+?\\)(\\[\\d+(\\,\\d+)?\\])?"],
-    replacePatternHREF: ["!\\[.+\\]\\(|\\)|\\[\\d+(\\,\\d+)?\\]", "g"],
+    regExPattern: "(!\\[.+?\\]\\(.+?\\)(?:\\[\\d*\\,?\\d*\\])?)",
+    testPattern: ["!\\[.+?\\]\\(.+?\\)(\\[\\d*\\,?\\d*\\])?"],
+    replacePatternHREF: ["!\\[.+\\]\\(|\\)|\\[?\\d*\\,?\\d*\\]?", "g"],
     replacePatternText: ["!\\[|\\](.+)|\\[\\d+|\\,\\d+|\\]", "g"],
     replacePatternStyle: ["!\\[.+?\]\\(.+?\\)", "g"],
     htmlTag: s => "img"
