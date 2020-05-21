@@ -5,8 +5,6 @@ import CodeTag from "../CodeTag";
 import TableTag from "../TableTag";
 const HTMLTAGS = {
   p: s => {
-    console.log(s);
-
     if (s) {
       return /*#__PURE__*/React.createElement("p", {
         className: "mtr-p"

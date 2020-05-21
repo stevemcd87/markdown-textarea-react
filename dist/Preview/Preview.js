@@ -8,7 +8,7 @@ export default function Preview(props) {
     className: "mtr-preview"
   }, htmlElements.map((element, ind) => {
     return /*#__PURE__*/React.createElement(React.Fragment, {
-      key: "" + Date.now() + ind
+      key: `${element.htmlTag}-${element.elementText}-${ind}`
     }, HTMLTAGS[element.htmlTag](element.elementText));
   }));
 }
