@@ -1,4 +1,5 @@
 # markdown-textarea-react
+[live demo](https://stevemcd87.github.io/markdown-textarea-react-demo/)
 a **Node Package** that displays a textarea form input that accepts markdown syntax and converts value to html
 ## Install
 `npm i markdown-textarea-react`
