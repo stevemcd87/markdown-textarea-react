@@ -1,30 +1,50 @@
-const REGEXPATTERNS = {
-  code: {
+const REGEXPATTERNS = [
+  {
     regExPattern: ["^(```.+?```$)", "gms"],
-    htmlTag: s => "code"
+    htmlTag: "code"
   },
-  heading: {
-    regExPattern: ["^#{1,6}\\s"],
-    htmlTag: s => `h${s.match(/^#{1,6}\s/)[0].length - 1}`
+  {
+    regExPattern: ["^#{6}"],
+    htmlTag: "h6"
   },
-  blockquote: {
-    regExPattern: ["^>\\s"],
-    htmlTag: s => "blockquote"
+  {
+    regExPattern: ["^#{5}"],
+    htmlTag: "h5"
   },
-  ul: {
+  {
+    regExPattern: ["^#{4}"],
+    htmlTag: "h4"
+  },
+  {
+    regExPattern: ["^#{3}"],
+    htmlTag: "h3"
+  },
+  {
+    regExPattern: ["^#{2}"],
+    htmlTag: "h2"
+  },
+  {
+    regExPattern: ["^#"],
+    htmlTag: "h1"
+  },
+  {
+    regExPattern: ["^>"],
+    htmlTag: "blockquote"
+  },
+  {
     regExPattern: [
       "(^\\-\\s.+\\n+((?:^\\-\\s.+\\n)?(^\\s{2}\\-\\s.+\\s)+)?)+",
       "gm"
     ],
-    htmlTag: s => "ul"
+    htmlTag: "ul"
   },
-  table: {
+  {
     regExPattern: [
       "(^\\|.+\\|\\n)+",
       "gm"
     ],
-    htmlTag: s => "table"
+    htmlTag: "table"
   }
-};
+];
 
 export default REGEXPATTERNS;

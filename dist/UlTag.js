@@ -20,7 +20,7 @@ export default function UlTag(props) {
 
   function createLiTags(list) {
     let nested = /^\s{2}\-\s/.test(list),
-        regex = nested ? "(^\\s{2}\\-s.*)+" : "(^\\-\\s.+\\n)|(^\\-\\s.+\\n)(?<=^\\-\\s.+\\n)(^\\s{2}\\-\\s.+\\s)+?";
+        regex = nested ? "(^\\s{2}\\-s.*)+" : "(^\\-\\s.+\\n)|(^\\-\\s.+\\n)(?:^\\-\\s.+\\n)?(^\\s{2}\\-\\s.+\\s)+?";
     return list.split(new RegExp(regex, "gm"));
   }
 }

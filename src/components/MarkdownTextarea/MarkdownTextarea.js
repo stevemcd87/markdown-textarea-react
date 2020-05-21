@@ -25,8 +25,10 @@ function MarkdownTextarea(props) {
     let savedPatterns = savePatterns(sourceValue),
       // Splits the textarea value into linebreaks
       lineBreaks = createLineBreaks(savedPatterns),
-      // Wraps each linebreak with a designated element
-      markdownRows = lineBreaks.map(designateElement);
+      // Wraps each linebreak with a designated element & remves empty strings
+      markdownRows = lineBreaks
+        .map(designateElement)
+        .filter(v => v.elementText.trim());
     // Updates state
     setHtmlElements(markdownRows);
   }, [sourceValue]);
@@ -57,10 +59,10 @@ function MarkdownTextarea(props) {
       { textValue: textToSearch }
     );
   }
-  function createLineBreaks(sp) {
-    let lineBreaks = sp.textValue.split(/\n/g);
+  function createLineBreaks(savedPattern) {
+    let lineBreaks = savedPattern.textValue.split(/\n/g);
     Object.values(MULTILINEPATTERNS).forEach(patt => {
-      let matches = sp[patt.replaceTag] ? sp[patt.replaceTag] : [];
+      let matches = savedPattern[patt.replaceTag] || [];
       matches.forEach(match => {
         let ind = lineBreaks.findIndex(v => v === patt.replaceTag);
         if (ind > -1) lineBreaks[ind] = match;
@@ -75,11 +77,12 @@ function MarkdownTextarea(props) {
       // The text to be put into the htmlTag
       elementText = text.slice(),
       // Searches text for a markdown pattern
-      matchedPattern = searchForMatch(text);
+      matchedPattern = elementText === "" ? false : searchForMatch(text);
     // updates htmlTag & elementText if matchedPattern was found
     if (matchedPattern) {
-      htmlTag = matchedPattern.htmlTag(text);
+      htmlTag = matchedPattern.htmlTag;
       if (htmlTag !== "code" && htmlTag !== "ul" && htmlTag !== "table")
+        // removes regex pattern from text
         elementText = text.replace(
           text.match(new RegExp(...matchedPattern.regExPattern))[0],
           ""
@@ -90,7 +93,7 @@ function MarkdownTextarea(props) {
 
   function searchForMatch(text) {
     // Searches text for any Markdown patterns('##', '>', etc...)
-    return Object.values(REGEXPATTERNS).find(pattObject => {
+    return REGEXPATTERNS.find(pattObject => {
       return text.match(new RegExp(...pattObject.regExPattern));
     });
   }
@@ -101,8 +104,4 @@ MarkdownTextarea.defaultProps = {
   source: "",
   displayTextarea: true
 };
-const PatternsToSplit = Object.values(REGEXPATTERNS).reduce((t, v, i) => {
-  let prepend = i > 0 ? "|" : "";
-  return (t += prepend + v.regExPattern[0]);
-}, "");
 export default MarkdownTextarea;

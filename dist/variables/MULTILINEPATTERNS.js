@@ -4,7 +4,7 @@ const MULTILINEPATTERNS = {
     replaceTag: "<MTR-code-MTR>"
   },
   ul: {
-    regExPattern: ["(((^\\-\\s.+\\n)+((?<=^\\-\\s.+\\n)(^\\s{2}\\-\\s.+\\s)*)?)+)", "gm"],
+    regExPattern: ["(((^\\-\\s.+\\n)+((?:^\\-\\s.+\\n)?(^\\s{2}\\-\\s.+\\s)*)?)+)", "gm"],
     replaceTag: "<MTR-ul-MTR>"
   },
   table: {
